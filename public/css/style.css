@@ -1,0 +1,154 @@
+.scrollbar-hide::-webkit-scrollbar {
+display: none;
+}
+
+.scrollbar-hide {
+-ms-overflow-style: none;
+scrollbar-width: none;
+}
+
+/* Custom styles for search input */
+input:focus {
+outline: none;
+box-shadow: 0 0 0 3px rgb(59 130 246 / 0.5);
+border-color: #2563eb;
+}
+
+/* Carousel dots */
+.dot {
+width: 8px;
+height: 8px;
+margin: 0 4px;
+background-color: #cbd5e1;
+border-radius: 50%;
+display: inline-block;
+cursor: pointer;
+transition: background-color 0.3s ease;
+}
+
+.dot.active {
+background-color: #1e40af;
+/* dark blue */
+}
+
+/* Rounded corners top-left and top-right for the banner */
+.rounded-tl-tr {
+border-top-left-radius: 0.75rem;
+border-top-right-radius: 0.75rem;
+}
+
+/* Scrollbar styling for horizontal scroll containers */
+.scrollbar-hide::-webkit-scrollbar {
+display: none;
+}
+
+.scrollbar-hide {
+-ms-overflow-style: none;
+scrollbar-width: none;
+}
+
+/* overlay fade effect on scroll containers */
+.fade-left {
+position: relative;
+}
+
+.fade-left::before {
+content: "";
+position: absolute;
+left: 0;
+top: 0;
+bottom: 0;
+width: 50px;
+pointer-events: none;
+background: linear-gradient(to right, white 0%, transparent 100%);
+z-index: 10;
+opacity: 0.9;
+display: none;
+}
+
+.fade-right {
+position: relative;
+}
+
+.fade-right::after {
+content: "";
+position: absolute;
+right: 0;
+top: 0;
+bottom: 0;
+width: 50px;
+pointer-events: none;
+background: linear-gradient(to left, white 0%, transparent 100%);
+z-index: 10;
+opacity: 0.9;
+display: none;
+}
+
+/* Show gradient overlays on scrollable container on hover */
+.hover-fade:hover.fade-left::before {
+display: block;
+}
+
+.hover-fade:hover.fade-right::after {
+display: block;
+}
+
+/* Rounded images with shadow for categories */
+.category-img {
+transition: transform 0.25s ease, box-shadow 0.25s ease;
+border-radius: 12px;
+box-shadow: 0 8px 12px rgba(0, 0, 0, 0.1);
+}
+
+.category-img:hover {
+transform: scale(1.1);
+box-shadow: 0 14px 18px rgba(0, 0, 0, 0.18);
+cursor: pointer;
+}
+
+/* Text overlay for category images */
+.category-text-overlay {
+position: absolute;
+bottom: 8px;
+left: 50%;
+transform: translateX(-50%);
+color: white;
+font-weight: 700;
+font-size: 0.8rem;
+text-align: center;
+line-height: 1.2;
+text-shadow:
+-1px -1px 1px rgba(0, 0, 0, 0.7),
+1px -1px 1px rgba(0, 0, 0, 0.7),
+-1px 1px 1px rgba(0, 0, 0, 0.7),
+1px 1px 1px rgba(0, 0, 0, 0.7);
+padding: 0 6px;
+user-select: none;
+pointer-events: none;
+}
+
+.healing-card {
+transition: transform 0.3s ease;
+}
+
+.healing-card:hover {
+transform: translateY(-8px);
+box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+cursor: pointer;
+z-index: 5;
+position: relative;
+}
+
+.creator-img {
+border-radius: 9999px;
+transition: transform 0.25s ease;
+box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.creator-img:hover {
+transform: scale(1.15);
+box-shadow: 0 6px 12px rgba(0, 0, 0, 0.18);
+cursor: pointer;
+z-index: 10;
+position: relative;
+}
