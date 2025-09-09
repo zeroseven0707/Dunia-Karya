@@ -64,6 +64,9 @@ class ProductForm
             Toggle::make('product_up')
                 ->label('Product Up')
                 ->default(false),
+            Toggle::make('for_bussinees')
+                ->label('For bussinees')
+                ->default(false),
         ]);
     }
 }

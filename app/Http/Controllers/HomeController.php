@@ -14,7 +14,7 @@ class HomeController extends Controller
         $data['banners'] = Banner::all();
         $data['categories'] = Category::all();
         $data['productUp'] = Product::where('product_up', true)->get();
-        $data['productForBussines'] = Product::where('category_id', 1)->get();
+        $data['productForBussines'] = Product::where('for_bussinees', true)->get();
         $data['adminPanel'] = Product::where('category_id', 2)->get();
         return view('index', $data);
     }

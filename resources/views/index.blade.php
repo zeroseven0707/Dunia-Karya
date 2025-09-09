@@ -230,12 +230,17 @@
                 </a>
             @endforeach
         </div>
-        <img class="mt-7 rounded-xl" src="banner.jpg" alt="Banner promosi produk digital">
+        @foreach ($banners as $key => $bannerItem)
+            @if ($key == 2)
+                <img class="mt-7 rounded-xl shadow-md" src="{{ asset('storage/' . $bannerItem->path) }}"
+                    alt="{{ $bannerItem->alt }}">
+            @endif
+        @endforeach
     </section>
 
     <!-- Kreator Favorit -->
     <section aria-label="Kreator Favorit" class="max-w-7xl mx-auto px-5 py-6">
-        <h2 class="text-xl font-semibold mb-6 text-slate-800">Tags  </h2>
+        <h2 class="text-xl font-semibold mb-6 text-slate-800">Tags </h2>
         <nav class="overflow-x-auto no-scrollbar scrollbar-hide fade-left fade-right hover-fade flex space-x-6 py-2 px-1"
             aria-label="Popular creators list">
             <div class="flex flex-wrap gap-3 text-sm">
@@ -303,6 +308,11 @@
                 </a>
             @endforeach
         </div>
-        <img class="mt-7 rounded-xl" src="banner.jpg" alt="Banner promosi produk digital">
+        @foreach ($banners as $key => $bannerItem)
+            @if ($key == 1)
+                <img class="mt-7 rounded-xl shadow-md" src="{{ asset('storage/' . $bannerItem->path) }}"
+                    alt="{{ $bannerItem->alt }}">
+            @endif
+        @endforeach
     </section>
 @endsection
