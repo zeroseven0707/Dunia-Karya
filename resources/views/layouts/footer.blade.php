@@ -14,10 +14,10 @@
             <div>
                 <h3 class="text-lg font-semibold mb-3">Navigasi</h3>
                 <ul class="space-y-2">
-                    <li><a href="#" class="hover:underline text-gray-300">Beranda</a></li>
-                    <li><a href="#" class="hover:underline text-gray-300">Produk</a></li>
-                    <li><a href="#" class="hover:underline text-gray-300">Blog</a></li>
-                    <li><a href="#" class="hover:underline text-gray-300">Kontak</a></li>
+                    <li><a href="{{ route('home') }}" class="hover:underline text-gray-300">Beranda</a></li>
+                    <li><a href="{{ route('products.index') }}" class="hover:underline text-gray-300">Produk</a></li>
+                    <li><a href="{{ route('articles.index') }}" class="hover:underline text-gray-300">Blog</a></li>
+                    <li><a href="{{ route('contact') }}" class="hover:underline text-gray-300">Kontak</a></li>
                 </ul>
             </div>
 
@@ -25,9 +25,9 @@
             <div>
                 <h3 class="text-lg font-semibold mb-3">Bantuan</h3>
                 <ul class="space-y-2">
-                    <li><a href="#" class="hover:underline text-gray-300">FAQ</a></li>
-                    <li><a href="#" class="hover:underline text-gray-300">Kebijakan Privasi</a></li>
-                    <li><a href="#" class="hover:underline text-gray-300">Syarat & Ketentuan</a></li>
+                    <li><a href="{{ route('faq') }}" class="hover:underline text-gray-300">FAQ</a></li>
+                    <li><a href="{{ route('privacy') }}" class="hover:underline text-gray-300">Kebijakan Privasi</a></li>
+                    <li><a href="{{ route('terms') }}" class="hover:underline text-gray-300">Syarat & Ketentuan</a></li>
                     <li><a href="#" class="hover:underline text-gray-300">Pusat Bantuan</a></li>
                 </ul>
             </div>

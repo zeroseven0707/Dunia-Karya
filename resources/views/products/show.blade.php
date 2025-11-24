@@ -35,11 +35,11 @@
             <!-- Tombol Aksi -->
             <div class="mt-8 space-y-4">
                 <button type="button"
-                    class="w-full bg-blue-600 text-white py-3 rounded-md text-lg font-semibold hover:bg-blue-700 transition-colors">
+                    class="w-full border border-blue-600 text-blue-600 py-3 rounded-md text-lg font-semibold hover:bg-blue-50 transition-colors">
                     Tambahkan ke Keranjang
                 </button>
                 <button type="button"
-                    class="w-full border border-blue-600 text-blue-600 py-3 rounded-md text-lg font-semibold hover:bg-blue-50 transition-colors">
+                    class="w-full bg-blue-600 text-white py-3 rounded-md text-lg font-semibold hover:bg-blue-700 transition-colors">
                     Beli Sekarang
                 </button>
                 @if ($product->demo_url)
@@ -107,7 +107,7 @@
     </section>
 
     <!-- Related Products -->
-    {{-- <section aria-label="Produk digital terkait" class="mt-16 max-w-7xl mx-auto">
+    <section aria-label="Produk digital terkait" class="mt-16 max-w-7xl mx-auto">
         <h3 class="text-2xl font-bold mb-6">Produk Digital Terkait</h3>
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
             @foreach ($relatedProducts as $related)
@@ -133,5 +133,5 @@
                 </article>
             @endforeach
         </div>
-    </section> --}}
+    </section>
 @endsection

@@ -13,6 +13,7 @@
     <meta name="author" content="Dunia Karya">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://www.duniakarya.com/" />
+    <link rel="icon" type="image/png" href="{{ asset('img/favicon.png') }}">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:title" content="Dunia Karya - Toko Online Digital" />
@@ -30,7 +31,7 @@
     <meta name="twitter:image" content="https://www.duniakarya.com/images/og-banner.jpg" />
 
     <!-- Tailwind -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="{{ asset('js/tailwind.js') }}"></script>
     <style src="{{ asset('css/style.css') }}"></style>
 </head>
 
