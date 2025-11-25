@@ -15,6 +15,22 @@ Route::get('/search', [HomeController::class, 'search'])->name('search');
 Route::get('/category/{slug}', [HomeController::class, 'category'])->name('category.show');
 Route::get('/tag/{slug}', [HomeController::class, 'tag'])->name('tag.show');
 
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\PaymentCallbackController;
+
+Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+Route::post('/cart/add/{productId}', [CartController::class, 'addToCart'])->name('cart.add');
+Route::delete('/cart/remove/{itemId}', [CartController::class, 'remove'])->name('cart.remove');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+    Route::post('/checkout/process', [CheckoutController::class, 'process'])->name('checkout.process');
+    Route::get('/my-purchases', [CheckoutController::class, 'purchases'])->name('purchases.index');
+});
+
+Route::post('/payment/notification', [PaymentCallbackController::class, 'handle'])->name('payment.notification');
+
 Route::get('/privacy-policy', [HomeController::class, 'privacy'])->name('privacy');
 Route::get('/terms-and-conditions', [HomeController::class, 'terms'])->name('terms');
 Route::get('/faq', [HomeController::class, 'faq'])->name('faq');

@@ -33,15 +33,29 @@
             </div>
 
             <!-- Tombol Aksi -->
+            <!-- Tombol Aksi -->
             <div class="mt-8 space-y-4">
-                <button type="button"
-                    class="w-full border border-blue-600 text-blue-600 py-3 rounded-md text-lg font-semibold hover:bg-blue-50 transition-colors">
-                    Tambahkan ke Keranjang
-                </button>
-                <button type="button"
-                    class="w-full bg-blue-600 text-white py-3 rounded-md text-lg font-semibold hover:bg-blue-700 transition-colors">
-                    Beli Sekarang
-                </button>
+                <form action="{{ route('cart.add', $product->id) }}" method="POST">
+                    @csrf
+                    <button type="submit"
+                        class="w-full border border-blue-600 text-blue-600 py-3 rounded-md text-lg font-semibold hover:bg-blue-50 transition-colors">
+                        Tambahkan ke Keranjang
+                    </button>
+                </form>
+                
+                <form action="{{ route('cart.add', $product->id) }}" method="POST">
+                    @csrf
+                    <!-- Buy Now essentially adds to cart and redirects to checkout, or we can have a direct checkout flow. 
+                         For simplicity, let's add to cart and redirect to cart/checkout. 
+                         We might need a query param to auto-redirect. -->
+                    <input type="hidden" name="redirect_checkout" value="1"> 
+                    <!-- Note: Controller needs to handle this input if we want direct checkout. 
+                         For now, let's just make it add to cart. Or we can make a separate route. -->
+                    <button type="submit" formaction="{{ route('cart.add', ['productId' => $product->id, 'checkout' => 1]) }}"
+                        class="w-full bg-blue-600 text-white py-3 rounded-md text-lg font-semibold hover:bg-blue-700 transition-colors">
+                        Beli Sekarang
+                    </button>
+                </form>
                 @if ($product->demo_url)
                     <a href="{{ $product->demo_url }}" target="_blank"
                         class="w-full block text-center bg-green-600 text-white py-3 rounded-md text-lg font-semibold hover:bg-green-700 transition-colors">

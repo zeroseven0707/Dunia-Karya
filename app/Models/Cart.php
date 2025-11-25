@@ -6,19 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class OrderItem extends Model
+class Cart extends Model
 {
     use HasFactory, HasUuids;
 
-    protected $fillable = [
-        'order_id',
-        'product_id',
-        'price',
-        'quantity'
-    ];
+    protected $fillable = ['user_id', 'session_id'];
 
-    public function product()
+    public function items()
     {
-        return $this->belongsTo(Product::class);
+        return $this->hasMany(CartItem::class);
     }
 }
