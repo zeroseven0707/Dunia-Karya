@@ -33,6 +33,7 @@
     <!-- Tailwind -->
     <script src="{{ asset('js/tailwind.js') }}"></script>
     <style src="{{ asset('css/style.css') }}"></style>
+    <link rel="stylesheet" href="{{ asset('css/animations.css') }}">
 </head>
 
 <body class="bg-gray-50 font-sans text-gray-900">
