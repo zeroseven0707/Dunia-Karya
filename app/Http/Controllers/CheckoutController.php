@@ -84,7 +84,21 @@ class CheckoutController extends Controller
                     'name' => substr($item->product->title, 0, 50), // Midtrans limit
                 ];
             })->toArray(),
+            'callbacks' => [
+                'finish' => route('home'),
+            ]
         ];
+
+        // Set notification URL (for production)
+        Config::$serverKey = config('midtrans.server_key');
+        Config::$isProduction = config('midtrans.is_production');
+        Config::$isSanitized = config('midtrans.is_sanitized');
+        Config::$is3ds = config('midtrans.is_3ds');
+        
+        // Only set notification URL if in production or if APP_URL is set
+        if (config('app.url') && config('app.url') !== 'http://localhost') {
+            Config::$overrideNotifUrl = config('app.url') . '/api/midtrans/callback';
+        }
 
         try {
             $snapToken = Snap::getSnapToken($params);
