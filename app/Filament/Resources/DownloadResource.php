@@ -10,13 +10,14 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 
+use BackedEnum;
 use UnitEnum;
 
 class DownloadResource extends Resource
 {
     protected static ?string $model = Download::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-arrow-down-tray';
+    protected static BackedEnum | string | null $navigationIcon = 'heroicon-o-arrow-down-tray';
 
     protected static ?string $navigationLabel = 'Download Reports';
 
