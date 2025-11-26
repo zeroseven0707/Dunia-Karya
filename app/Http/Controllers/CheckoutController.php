@@ -109,7 +109,6 @@ class CheckoutController extends Controller
     public function purchases()
     {
         $orders = Order::where('user_id', Auth::id())
-            ->where('status', 'paid')
             ->with('items.product.files')
             ->latest()
             ->get();

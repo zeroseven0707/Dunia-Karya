@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->foreignUuid('order_id');
             $table->foreignUuid('product_id');
             $table->double('price');
-            $table->integer('qty');
+            $table->integer('quantity');
             $table->timestamps();
         });
     }
