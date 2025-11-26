@@ -11,33 +11,51 @@ use Filament\Widgets\StatsOverviewWidget\Stat;
 
 class DashboardOverview extends StatsOverviewWidget
 {
-    protected int|string|array $columnSpan = '1'; // Widget-nya ambil penuh (1 slot)
-
-    protected function getColumns(): int|array
-    {
-        return 2; // di dalam widget ini semua stat card dibagi jadi 2 kolom
-    }
+    protected static ?int $sort = 1;
 
     protected function getStats(): array
     {
+        // Revenue calculations
+        $currentMonthRevenue = \App\Models\Order::where('status', 'paid')
+            ->whereMonth('created_at', now()->month)
+            ->whereYear('created_at', now()->year)
+            ->sum('total_price');
+            
+        $lastMonthRevenue = \App\Models\Order::where('status', 'paid')
+            ->whereMonth('created_at', now()->subMonth()->month)
+            ->whereYear('created_at', now()->subMonth()->year)
+            ->sum('total_price');
+            
+        $revenueTrend = $lastMonthRevenue > 0 
+            ? (($currentMonthRevenue - $lastMonthRevenue) / $lastMonthRevenue) * 100 
+            : 100;
+
+        // Order calculations
+        $currentMonthOrders = \App\Models\Order::where('status', 'paid')
+            ->whereMonth('created_at', now()->month)
+            ->count();
+
         return [
-            Stat::make('Total User', User::count())
-                ->description('Jumlah semua buyer'),
+            Stat::make('Total Revenue (This Month)', 'Rp ' . number_format($currentMonthRevenue, 0, ',', '.'))
+                ->description($revenueTrend >= 0 ? number_format($revenueTrend, 1) . '% increase' : number_format(abs($revenueTrend), 1) . '% decrease')
+                ->descriptionIcon($revenueTrend >= 0 ? 'heroicon-m-arrow-trending-up' : 'heroicon-m-arrow-trending-down')
+                ->color($revenueTrend >= 0 ? 'success' : 'danger')
+                ->chart([7, 2, 10, 3, 15, 4, 17]), // Dummy chart for visual appeal, can be real data
 
-            Stat::make('Total Products', Product::count())
-                ->description('Jumlah semua produk'),
+            Stat::make('New Orders (This Month)', $currentMonthOrders)
+                ->description('Paid orders')
+                ->descriptionIcon('heroicon-m-shopping-bag')
+                ->color('primary'),
 
-            Stat::make('Total Categories', Category::count())
-                ->description('Jumlah semua kategori'),
-
-            Stat::make('Total Vouchers', Voucher::count())
-                ->description('Jumlah semua voucher'),
-
-            Stat::make('Published Products', Product::where('status', 'published')->count())
-                ->description('Produk yang sudah dipublikasikan'),
-
-            Stat::make('Draft Products', Product::where('status', 'draft')->count())
-                ->description('Produk dalam status draft'),
+            Stat::make('Total Customers', User::where('role', '!=', 'admin')->count())
+                ->description('Registered users')
+                ->descriptionIcon('heroicon-m-users')
+                ->color('info'),
+                
+            Stat::make('Active Products', Product::where('status', 'published')->count())
+                ->description('Ready to sell')
+                ->descriptionIcon('heroicon-m-cube')
+                ->color('success'),
         ];
     }
 }

@@ -27,10 +27,18 @@ class DownloadController extends Controller
             abort(403, 'Anda belum membeli produk ini.');
         }
 
-        if (!Storage::disk('public')->exists($file->file_path)) {
+        if (!Storage::disk('local')->exists($file->file_path)) {
             abort(404, 'File tidak ditemukan.');
         }
 
-        return Storage::disk('public')->download($file->file_path);
+        // Track download
+        \App\Models\Download::create([
+            'user_id' => Auth::id(),
+            'product_file_id' => $file->id,
+            'ip_address' => request()->ip(),
+            'user_agent' => request()->userAgent(),
+        ]);
+
+        return Storage::disk('local')->download($file->file_path);
     }
 }
