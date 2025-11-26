@@ -157,19 +157,19 @@
                                 <div class="relative mb-4">
                                     <div class="w-20 h-20 rounded-full bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600 p-1">
                                         <div class="w-full h-full rounded-full bg-white p-1">
-                                            <img src="https://placehold.co/200x200/0A1E58/FFFFFF?text=DK" 
+                                            <img src="{{ asset('img/pp-instagram.png') }}" 
                                                  alt="Dunia Karya" 
                                                  class="w-full h-full rounded-full object-cover">
                                         </div>
                                     </div>
                                 </div>
-                                <h3 class="text-xl font-bold text-gray-900 mb-1">@duniakarya</h3>
+                                <h3 class="text-xl font-bold text-gray-900 mb-1">@duniakarya.site</h3>
                                 <p class="text-gray-600 text-sm mb-4">Toko Online Produk Digital</p>
                                 <div class="flex items-center justify-center gap-4 text-sm mb-4">
                                     <div><span class="font-bold text-gray-900">1.2K</span> <span class="text-gray-600">posts</span></div>
                                     <div><span class="font-bold text-gray-900">12.5K</span> <span class="text-gray-600">followers</span></div>
                                 </div>
-                                <a href="https://instagram.com" target="_blank" class="w-full px-6 py-2.5 bg-gradient-to-r from-pink-500 to-purple-600 text-white font-semibold rounded-xl hover:from-pink-600 hover:to-purple-700 transition-all shadow-lg hover:shadow-xl">
+                                <a href="https://instagram.com/duniakarya.site" target="_blank" class="w-full px-6 py-2.5 bg-gradient-to-r from-pink-500 to-purple-600 text-white font-semibold rounded-xl hover:from-pink-600 hover:to-purple-700 transition-all shadow-lg hover:shadow-xl">
                                     Follow
                                 </a>
                             </div>

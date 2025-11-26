@@ -1,5 +1,26 @@
 @extends('layouts.app')
 
+@section('title', $product->name . ' - Dunia Karya')
+
+@section('meta')
+    <meta name="description" content="{{ Str::limit(strip_tags($product->description), 150) }}">
+    <meta name="keywords" content="produk digital, {{ $product->name }}, dunia karya, beli {{ $product->name }}">
+    <meta name="author" content="Dunia Karya">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:title" content="{{ $product->name }} - Dunia Karya" />
+    <meta property="og:description" content="{{ Str::limit(strip_tags($product->description), 150) }}" />
+    <meta property="og:image" content="{{ asset('storage/' . $product->image) }}" />
+    <meta property="og:url" content="{{ route('products.show', $product->id) }}" />
+    <meta property="og:type" content="product" />
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="{{ $product->name }} - Dunia Karya" />
+    <meta name="twitter:description" content="{{ Str::limit(strip_tags($product->description), 150) }}" />
+    <meta name="twitter:image" content="{{ asset('storage/' . $product->image) }}" />
+@endsection
+
 @section('content')
 
 <style>

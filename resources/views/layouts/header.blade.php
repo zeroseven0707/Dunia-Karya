@@ -1,15 +1,55 @@
     <!-- Main Navbar -->
-    <nav x-data="{ mobileMenuOpen: false }" class="fixed top-0 left-0 right-0 bg-[#0A1E58] px-5 py-3 text-white shadow-lg z-40">
-        <!-- Tombol Hamburger (Mobile only) -->
+    <nav x-data="{ mobileMenuOpen: false, mobileSearchOpen: false }" class="fixed top-0 left-0 right-0 bg-[#0A1E58] px-5 py-3 text-white shadow-lg z-40">
+        <!-- Mobile Header -->
         <div class="flex justify-between items-center md:hidden">
+            <!-- Logo -->
             <div class="space-x-1 text-lg font-semibold">
-                <img src="{{ asset('img/logo.png') }}" alt="Dunia Karya Logo" class="h-10 w-auto">
+                <a href="{{ route('home') }}">
+                    <img src="{{ asset('img/logo.png') }}" alt="Dunia Karya Logo" class="h-10 w-auto">
+                </a>
             </div>
-            <button @click="mobileMenuOpen = !mobileMenuOpen" class="text-white focus:outline-none">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-            </button>
+
+            <!-- Mobile Icons (Search, Cart, Menu) -->
+            <div class="flex items-center gap-3">
+                <!-- Search Toggle -->
+                <button @click="mobileSearchOpen = !mobileSearchOpen" class="text-white focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                </button>
+
+                <!-- Cart Icon -->
+                <a href="{{ url('cart') }}" class="relative text-white focus:outline-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2 9h14l-2-9M10 21a1 1 0 11-2 0 1 1 0 012 0zm8 0a1 1 0 11-2 0 1 1 0 012 0z" />
+                    </svg>
+                    @if(isset($cartCount) && $cartCount > 0)
+                        <span data-cart-count class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] px-1 py-0.5 rounded-full min-w-[16px] text-center">{{ $cartCount }}</span>
+                    @else
+                        <span data-cart-count class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] px-1 py-0.5 rounded-full min-w-[16px] text-center hidden">0</span>
+                    @endif
+                </a>
+
+                <!-- Hamburger Menu -->
+                <button @click="mobileMenuOpen = !mobileMenuOpen" class="text-white focus:outline-none ml-1">
+                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Search Bar (Collapsible) -->
+        <div x-show="mobileSearchOpen" x-transition class="md:hidden mt-3 border-t border-blue-800 pt-3">
+            <form action="{{ request()->routeIs('articles.*') ? route('articles.index') : route('search') }}" method="GET" class="flex items-center bg-[#162C59] rounded px-3 py-2">
+                <input type="text" name="q" value="{{ request('q') }}" placeholder="{{ request()->routeIs('articles.*') ? 'Cari artikel...' : 'Cari produk digital...' }}"
+                    class="bg-transparent text-white w-full text-sm placeholder-gray-400 outline-none" />
+                <button type="submit" class="bg-[#0061EB] p-1.5 rounded ml-2 hover:bg-blue-700">
+                    <svg class="h-4 w-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1110.5 3a7.5 7.5 0 016.15 13.65z" />
+                    </svg>
+                </button>
+            </form>
         </div>
 
         <!-- Konten Navbar (Desktop Only) -->
@@ -48,9 +88,6 @@
                     <a href="{{ route('privacy') }}" class="hover:underline">Kebijakan Privasi</a>
                     <a href="{{ route('terms') }}" class="hover:underline">Syarat & Ketentuan</a>
                     <a href="{{ route('faq') }}" class="hover:underline">FAQ</a>
-                    {{-- @foreach (tags() as $tag) --}}
-                    {{-- <a href="{{ url('tag='.$tag->name) }}" class="hover:underline">{{ $tag->name }}</a> --}}
-                    {{-- @endforeach --}}
                 </div>
             </div>
 
@@ -73,25 +110,23 @@
                     </svg>
                     Blog
                 </button>
-                @auth
-                    {{-- Jika sudah login --}}
-                    <div class="flex items-center gap-4 px-3">
-                        {{-- Tombol Keranjang --}}
-                        <a href="{{ url('cart') }}" class="relative">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white hover:text-gray-200"
-                                fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2 9h14l-2-9M10 21a1 1 0 11-2 0 1 1 0 012 0zm8 0a1 1 0 11-2 0 1 1 0 012 0z" />
-                            </svg>
-                            {{-- Contoh badge jumlah item --}}
-                            @if(isset($cartCount) && $cartCount > 0)
-                                <span data-cart-count class="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-1.5 py-0.5 rounded-full">{{ $cartCount }}</span>
-                            @else
-                                <span data-cart-count class="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-1.5 py-0.5 rounded-full hidden">0</span>
-                            @endif
-                        </a>
+                
+                {{-- Tombol Keranjang (Visible to all) --}}
+                <div class="flex items-center gap-4 px-3">
+                    <a href="{{ url('cart') }}" class="relative">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white hover:text-gray-200"
+                            fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2 9h14l-2-9M10 21a1 1 0 11-2 0 1 1 0 012 0zm8 0a1 1 0 11-2 0 1 1 0 012 0z" />
+                        </svg>
+                        @if(isset($cartCount) && $cartCount > 0)
+                            <span data-cart-count class="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-1.5 py-0.5 rounded-full">{{ $cartCount }}</span>
+                        @else
+                            <span data-cart-count class="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-1.5 py-0.5 rounded-full hidden">0</span>
+                        @endif
+                    </a>
 
-                        {{-- Menu Profil --}}
+                    @auth
                         {{-- Menu Profil (Dropdown by Click) --}}
                         <div x-data="{ open: false }" class="relative">
                             <button @click="open = !open"
