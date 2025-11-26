@@ -103,7 +103,7 @@ class CheckoutController extends Controller
     {
         $orders = Order::where('user_id', Auth::id())
             ->where('status', 'paid')
-            ->with('items.product')
+            ->with('items.product.files')
             ->latest()
             ->get();
             

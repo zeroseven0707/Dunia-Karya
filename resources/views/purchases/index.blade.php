@@ -45,21 +45,25 @@
                                         </div>
                                         <p class="mt-1 text-sm text-gray-500">{{ $item->product->category->name ?? '' }}</p>
                                         
-                                        <div class="flex-1 flex items-end justify-between text-sm">
+                                        <div class="flex-1 flex items-end justify-between text-sm mt-2">
                                             <p class="text-gray-500">Qty {{ $item->quantity }}</p>
 
-                                            <div class="flex">
+                                            <div class="flex flex-col gap-2">
                                                 @if($order->status == 'paid')
-                                                    <!-- Access/Download Button -->
-                                                    @if($item->product->demo_url)
-                                                        <a href="{{ $item->product->demo_url }}" target="_blank" class="font-medium text-blue-600 hover:text-blue-500 mr-4">
-                                                            Akses Produk
-                                                        </a>
+                                                    <!-- Download Files -->
+                                                    @if($item->product->files->count() > 0)
+                                                        @foreach($item->product->files as $file)
+                                                            <a href="{{ route('download.file', $file->id) }}" class="flex items-center gap-2 text-sm font-medium text-blue-600 hover:text-blue-500">
+                                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                                                </svg>
+                                                                <span class="px-2 py-0.5 text-xs rounded bg-blue-100 text-blue-800">{{ ucfirst($file->file_type) }}</span>
+                                                                <span class="text-xs text-gray-500">({{ number_format($file->file_size_bytes / 1024 / 1024, 2) }} MB)</span>
+                                                            </a>
+                                                        @endforeach
                                                     @else
-                                                        <span class="text-gray-400">Link tidak tersedia</span>
+                                                        <span class="text-gray-500 text-sm italic">File belum tersedia</span>
                                                     @endif
-                                                    
-                                                    <!-- We could also have a specific download route if we stored files -->
                                                 @endif
                                             </div>
                                         </div>
