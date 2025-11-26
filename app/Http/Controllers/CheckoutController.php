@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\Cart;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\Voucher;
+use App\Models\VoucherUsage;
 use Illuminate\Support\Facades\Auth;
 use Midtrans\Config;
 use Midtrans\Snap;
@@ -41,10 +43,41 @@ class CheckoutController extends Controller
             return redirect()->route('cart.index');
         }
 
-        // Calculate total
-        $totalPrice = $cart->items->sum(function($item) {
-            return ($item->product->discount_price ?? $item->product->price) * $item->quantity;
-        });
+        // Calculate total & build item details
+        $itemDetails = $cart->items->map(function($item) {
+            return [
+                'id' => $item->product_id,
+                'price' => (int) ($item->product->discount_price ?? $item->product->price),
+                'quantity' => $item->quantity,
+                'name' => substr($item->product->title, 0, 50),
+            ];
+        })->toArray();
+        $totalPrice = array_sum(array_map(fn($d) => $d['price'] * $d['quantity'], $itemDetails));
+
+        // Apply voucher if provided
+        $voucherCode = $request->input('voucher_code');
+        $discount = 0;
+        $appliedVoucher = null;
+        if ($voucherCode) {
+            $appliedVoucher = Voucher::where('code', $voucherCode)->first();
+            if ($appliedVoucher) {
+                $now = now();
+                if ($appliedVoucher->start_date <= $now && $appliedVoucher->exp_date >= $now && $appliedVoucher->qty > 0 && $totalPrice >= $appliedVoucher->min_spend) {
+                    $discount = min((int) $appliedVoucher->discount_value, (int) $totalPrice);
+                    $remaining = $discount;
+                    foreach ($itemDetails as &$detail) {
+                        if ($remaining <= 0) break;
+                        $lineTotal = $detail['price'] * $detail['quantity'];
+                        $deduct = min($remaining, $lineTotal);
+                        $newLineTotal = $lineTotal - $deduct;
+                        $detail['price'] = (int) floor($newLineTotal / max(1, $detail['quantity']));
+                        $remaining -= $deduct;
+                    }
+                    unset($detail);
+                    $totalPrice = max(0, $totalPrice - $discount);
+                }
+            }
+        }
 
         // Create Order
         $order = Order::create([
@@ -66,6 +99,15 @@ class CheckoutController extends Controller
             ]);
         }
 
+        if ($appliedVoucher && $discount > 0) {
+            $appliedVoucher->decrement('qty');
+            $usage = new VoucherUsage();
+            $usage->user_id = Auth::id();
+            $usage->order_id = $order->id;
+            $usage->used_at = now();
+            $usage->save();
+        }
+
         // Midtrans Params
         $params = [
             'transaction_details' => [
@@ -76,14 +118,7 @@ class CheckoutController extends Controller
                 'first_name' => Auth::user()->name,
                 'email' => Auth::user()->email,
             ],
-            'item_details' => $cart->items->map(function($item) {
-                return [
-                    'id' => $item->product_id,
-                    'price' => (int) ($item->product->discount_price ?? $item->product->price),
-                    'quantity' => $item->quantity,
-                    'name' => substr($item->product->title, 0, 50), // Midtrans limit
-                ];
-            })->toArray(),
+            'item_details' => $itemDetails,
             'callbacks' => [
                 'finish' => route('home'),
             ]

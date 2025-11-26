@@ -36,6 +36,14 @@
         <div class="bg-white shadow-md rounded-lg p-6 h-fit">
             <h2 class="text-xl font-semibold mb-4">Pembayaran</h2>
             <p class="text-gray-600 mb-6">Silakan selesaikan pembayaran Anda.</p>
+
+            <div class="mb-4">
+                <label for="voucher-code" class="block text-sm font-medium text-gray-700">Kode Voucher</label>
+                <div class="mt-1 flex">
+                    <input id="voucher-code" type="text" class="flex-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" placeholder="Masukkan kode voucher (opsional)" />
+                </div>
+                <p id="voucher-feedback" class="mt-2 text-sm text-gray-500"></p>
+            </div>
             
             <button id="pay-button" class="w-full bg-blue-600 text-white py-3 rounded-md text-lg font-semibold hover:bg-blue-700 transition-colors">
                 Bayar Sekarang
@@ -56,12 +64,15 @@
         payButton.disabled = true;
         payButton.textContent = 'Memproses...';
         
+        const voucherInput = document.getElementById('voucher-code');
+        const voucherCode = voucherInput ? voucherInput.value.trim() : null;
         fetch('{{ route('checkout.process') }}', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            }
+            },
+            body: JSON.stringify({ voucher_code: voucherCode })
         })
         .then(response => response.json())
         .then(data => {
@@ -69,6 +80,16 @@
             payButton.disabled = false;
             payButton.textContent = 'Bayar Sekarang';
             
+            const feedbackEl = document.getElementById('voucher-feedback');
+            if (data.error) {
+                if (feedbackEl) {
+                    feedbackEl.textContent = data.message ? ('Voucher tidak valid: ' + data.message) : 'Terjadi kesalahan saat memproses voucher.';
+                    feedbackEl.classList.remove('text-gray-500');
+                    feedbackEl.classList.add('text-red-600');
+                }
+                alert(data.error);
+                return;
+            }
             if(data.snap_token) {
                 snap.pay(data.snap_token, {
                     onSuccess: function(result){

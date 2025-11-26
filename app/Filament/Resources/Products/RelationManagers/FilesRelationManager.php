@@ -2,9 +2,15 @@
 
 namespace App\Filament\Resources\Products\RelationManagers;
 
+use Filament\Actions\Action;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
 use Filament\Forms;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Schemas\Schema;
+use Filament\Actions\CreateAction;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Support\Facades\Storage;
@@ -97,7 +103,7 @@ class FilesRelationManager extends RelationManager
                     ]),
             ])
             ->headerActions([
-                Tables\Actions\CreateAction::make()
+                CreateAction::make()
                     ->mutateFormDataUsing(function (array $data): array {
                         // Calculate file size and checksum if not already set
                         if (isset($data['file_path']) && !isset($data['file_size_bytes'])) {
@@ -111,21 +117,21 @@ class FilesRelationManager extends RelationManager
                     }),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make()
+                EditAction::make(),
+                DeleteAction::make()
                     ->after(function ($record) {
                         // Delete file from storage
                         if (Storage::disk('local')->exists($record->file_path)) {
                             Storage::disk('local')->delete($record->file_path);
                         }
                     }),
-                Tables\Actions\Action::make('download')
+                Action::make('download')
                     ->icon('heroicon-o-arrow-down-tray')
                     ->action(fn ($record) => Storage::disk('local')->download($record->file_path)),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make()
+                BulkActionGroup::make([
+                    DeleteBulkAction::make()
                         ->after(function ($records) {
                             foreach ($records as $record) {
                                 if (Storage::disk('local')->exists($record->file_path)) {
