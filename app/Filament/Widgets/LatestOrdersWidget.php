@@ -3,6 +3,7 @@
 namespace App\Filament\Widgets;
 
 use App\Models\Order;
+use Filament\Actions\Action;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
@@ -48,8 +49,8 @@ class LatestOrdersWidget extends BaseWidget
                     ->dateTime()
                     ->since(),
             ])
-            ->actions([
-                Tables\Actions\Action::make('view')
+            ->recordActions([
+                Action::make('view')
                     ->url(fn (Order $record): string => route('filament.admin.resources.orders.edit', $record))
                     ->icon('heroicon-m-eye'),
             ])
