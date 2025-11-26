@@ -163,24 +163,21 @@
                                 </form>
                             </div>
                         </div>
+                    @else
+                        {{-- Jika belum login --}}
+                        <a href="{{ url('register') }}"
+                            class="px-4 py-1.5 border border-white rounded text-white hover:bg-white hover:text-blue-800 text-sm">
+                            Daftar
+                        </a>
+                        <a href="{{ url('login') }}"
+                            class="px-4 py-1.5 bg-[#0061EB] rounded text-white font-semibold hover:bg-blue-700 text-sm">
+                            Masuk
+                        </a>
+                    @endauth
 
-                        <!-- Tambahkan Alpine.js -->
-
-                    </div>
-                @else
-                    {{-- Jika belum login --}}
-                    <a href="{{ url('register') }}"
-                        class="px-4 py-1.5 border border-white rounded text-white hover:bg-white hover:text-blue-800 text-sm">
-                        Daftar
-                    </a>
-                    <a href="{{ url('login') }}"
-                        class="px-4 py-1.5 bg-[#0061EB] rounded text-white font-semibold hover:bg-blue-700 text-sm">
-                        Masuk
-                    </a>
-                @endauth
-
-            </div>
-        </div>
+                </div> <!-- End Cart+Auth Container -->
+            </div> <!-- End Action Buttons -->
+        </div> <!-- End Navbar Content -->
 
         <!-- Mobile Sidebar Overlay -->
         <div x-show="mobileMenuOpen" 
