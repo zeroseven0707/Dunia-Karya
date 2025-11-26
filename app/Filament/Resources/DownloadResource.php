@@ -5,11 +5,10 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\DownloadResource\Pages;
 use App\Models\Download;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
+use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
-
 use BackedEnum;
 use UnitEnum;
 
@@ -25,10 +24,10 @@ class DownloadResource extends Resource
 
     protected static ?int $navigationSort = 3;
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 Forms\Components\Select::make('user_id')
                     ->relationship('user', 'name')
                     ->required()

@@ -3,8 +3,8 @@
 namespace App\Filament\Resources\Products\RelationManagers;
 
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
+use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Support\Facades\Storage;
@@ -15,10 +15,10 @@ class FilesRelationManager extends RelationManager
 
     protected static ?string $title = 'Product Files';
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 Forms\Components\FileUpload::make('file_path')
                     ->label('File')
                     ->disk('local') // Changed to private storage
