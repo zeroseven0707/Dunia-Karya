@@ -13,7 +13,7 @@ class LatestOrdersWidget extends BaseWidget
     
     protected int | string | array $columnSpan = 'full';
     
-    protected ?string $heading = 'Latest Orders';
+    protected static ?string $heading = 'Latest Orders';
 
     public function table(Table $table): Table
     {
