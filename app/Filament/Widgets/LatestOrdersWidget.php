@@ -13,7 +13,7 @@ class LatestOrdersWidget extends BaseWidget
     
     protected int | string | array $columnSpan = 'full';
     
-    protected static ?string $heading = 'Latest Orders';
+    protected ?string $heading = 'Latest Orders';
 
     public function table(Table $table): Table
     {
@@ -50,7 +50,7 @@ class LatestOrdersWidget extends BaseWidget
             ])
             ->actions([
                 Tables\Actions\Action::make('view')
-                    ->url(fn (Order $record): string => route('filament.admin.resources.orders.view', $record))
+                    ->url(fn (Order $record): string => route('filament.admin.resources.orders.edit', $record))
                     ->icon('heroicon-m-eye'),
             ])
             ->paginated(false);
