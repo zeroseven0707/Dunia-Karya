@@ -10,6 +10,8 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 
+use UnitEnum;
+
 class DownloadResource extends Resource
 {
     protected static ?string $model = Download::class;
@@ -18,7 +20,7 @@ class DownloadResource extends Resource
 
     protected static ?string $navigationLabel = 'Download Reports';
 
-    protected static ?string $navigationGroup = 'Reports';
+    protected static string | UnitEnum | null $navigationGroup = 'Reports';
 
     protected static ?int $navigationSort = 3;
 
