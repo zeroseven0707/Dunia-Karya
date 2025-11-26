@@ -44,11 +44,18 @@
     </div>
 </div>
 
-@push('scripts')
 <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ config('midtrans.client_key') }}"></script>
 <script type="text/javascript">
-    document.getElementById('pay-button').onclick = function(){
-        // SnapToken acquired from previous step
+(function() {
+    const payButton = document.getElementById('pay-button');
+    
+    if (!payButton) return;
+    
+    function handlePayment() {
+        // Disable button to prevent double clicks
+        payButton.disabled = true;
+        payButton.textContent = 'Memproses...';
+        
         fetch('{{ route('checkout.process') }}', {
             method: 'POST',
             headers: {
@@ -58,36 +65,50 @@
         })
         .then(response => response.json())
         .then(data => {
+            // Re-enable button
+            payButton.disabled = false;
+            payButton.textContent = 'Bayar Sekarang';
+            
             if(data.snap_token) {
                 snap.pay(data.snap_token, {
-                    // Optional
                     onSuccess: function(result){
-                        /* You may add your own implementation here */
-                        // alert("payment success!"); 
-                        window.location.href = "{{ route('purchases.index') }}";
+                        console.log('Payment success:', result);
+                        window.location.href = "{{ route('purchases') }}";
                     },
                     onPending: function(result){
-                        /* You may add your own implementation here */
-                        alert("wating your payment!"); console.log(result);
+                        console.log('Payment pending:', result);
+                        alert('Menunggu pembayaran Anda!');
                     },
                     onError: function(result){
-                        /* You may add your own implementation here */
-                        alert("payment failed!"); console.log(result);
+                        console.error('Payment error:', result);
+                        alert('Pembayaran gagal! Silakan coba lagi.');
                     },
                     onClose: function(){
-                        /* You may add your own implementation here */
-                        alert('you closed the popup without finishing the payment');
+                        console.log('Payment popup closed');
+                        alert('Anda menutup popup pembayaran tanpa menyelesaikan transaksi.');
                     }
                 });
             } else {
-                alert('Error getting payment token');
+                alert('Error: Tidak dapat memperoleh token pembayaran');
+                console.error('Response:', data);
             }
         })
         .catch(error => {
-            console.error('Error:', error);
-            alert('Something went wrong');
+            // Re-enable button
+            payButton.disabled = false;
+            payButton.textContent = 'Bayar Sekarang';
+            
+            console.error('Fetch error:', error);
+            alert('Terjadi kesalahan. Silakan coba lagi.');
         });
-    };
+    }
+    
+    payButton.addEventListener('click', handlePayment);
+    
+    // Cleanup on Turbo navigation
+    document.addEventListener('turbo:before-cache', function() {
+        payButton.removeEventListener('click', handlePayment);
+    }, { once: true });
+})();
 </script>
-@endpush
 @endsection
