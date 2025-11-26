@@ -89,13 +89,20 @@ class CheckoutController extends Controller
         try {
             $snapToken = Snap::getSnapToken($params);
             
-            // Update order with payment ref if needed, or just pass token to view
-            // Actually, we usually return the token to the frontend to open the popup
-            
             return response()->json(['snap_token' => $snapToken, 'order_id' => $order->id]);
 
         } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
+            // Log the error for debugging
+            \Log::error('Midtrans Checkout Error: ' . $e->getMessage(), [
+                'order_id' => $order->id ?? null,
+                'user_id' => Auth::id(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            return response()->json([
+                'error' => 'Terjadi kesalahan saat memproses pembayaran.',
+                'message' => $e->getMessage()
+            ], 500);
         }
     }
 
