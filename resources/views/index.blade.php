@@ -120,21 +120,25 @@
 
 <!-- Carousel Banner -->
 <section class="mx-auto max-w-7xl px-5 py-6 select-none animate-on-scroll">
-    <div id="carousel" class="relative rounded-lg overflow-hidden shadow-lg">
-        <div id="carousel" class="relative w-full h-52 md:h-64">
+    <div class="relative rounded-lg overflow-hidden shadow-lg group">
+        <!-- Grid container for slides -->
+        <div id="carousel" class="grid grid-cols-1">
             @foreach ($banners as $index => $banner)
-                <div class="carousel-slide absolute inset-0 transition-opacity duration-700 opacity-0">
-                    <a href="{{ $banner->url }}">
+                <!-- Grid item: col-start-1 row-start-1 to stack them -->
+                <div class="carousel-slide col-start-1 row-start-1 transition-opacity duration-700 ease-in-out {{ $index === 0 ? 'opacity-100 z-10' : 'opacity-0 z-0' }}">
+                    <a href="{{ $banner->url }}" class="block w-full">
                         <img src="{{ asset('storage/' . $banner->path) }}" alt="{{ $banner->alt }}"
-                            class="w-full h-full object-cover rounded-lg shadow-md" />
+                            class="w-full h-auto object-contain rounded-lg shadow-md" />
                     </a>
                 </div>
             @endforeach
         </div>
+        
+        <!-- Navigation Dots -->
         <div class="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2 z-20" role="tablist"
             aria-label="Carousel Navigation">
             @foreach ($banners as $index => $banner)
-                <button class="dot w-3 h-3 rounded-full bg-white/80 border border-gray-400 focus:outline-none transition-all duration-300 hover:scale-125"
+                <button class="dot w-3 h-3 rounded-full {{ $index === 0 ? 'bg-white' : 'bg-white/50' }} border border-gray-400 focus:outline-none transition-all duration-300 hover:scale-125"
                     data-index="{{ $index }}" aria-label="Slide {{ $index + 1 }}"></button>
             @endforeach
         </div>

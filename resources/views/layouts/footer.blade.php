@@ -62,39 +62,58 @@
         </div>
     </footer>
     <script>
-        const slides = document.querySelectorAll('#carousel .carousel-slide');
-        const dots = document.querySelectorAll('[data-index]');
-        let current = 0;
+        (function() {
+            const slides = document.querySelectorAll('#carousel .carousel-slide');
+            if (slides.length === 0) return;
 
-        function showSlide(index) {
-            slides.forEach((slide, i) => {
-                slide.classList.toggle('opacity-100', i === index);
-                slide.classList.toggle('opacity-0', i !== index);
-                slide.classList.toggle('z-10', i === index);
-                slide.classList.toggle('z-0', i !== index);
+            const dots = document.querySelectorAll('[data-index]');
+            let current = 0;
+            let intervalId;
+
+            function showSlide(index) {
+                slides.forEach((slide, i) => {
+                    slide.classList.toggle('opacity-100', i === index);
+                    slide.classList.toggle('opacity-0', i !== index);
+                    slide.classList.toggle('z-10', i === index);
+                    slide.classList.toggle('z-0', i !== index);
+                });
+
+                dots.forEach((dot, i) => {
+                    dot.classList.toggle('bg-white', i === index);
+                    dot.classList.toggle('bg-white/50', i !== index);
+                });
+
+                current = index;
+            }
+
+            dots.forEach(dot => {
+                dot.addEventListener('click', () => {
+                    showSlide(parseInt(dot.dataset.index));
+                    resetInterval();
+                });
             });
 
-            dots.forEach((dot, i) => {
-                dot.classList.toggle('bg-white', i === index);
-                dot.classList.toggle('bg-white/50', i !== index);
-            });
+            function startInterval() {
+                intervalId = setInterval(() => {
+                    let next = (current + 1) % slides.length;
+                    showSlide(next);
+                }, 4000);
+            }
 
-            current = index;
-        }
+            function resetInterval() {
+                clearInterval(intervalId);
+                startInterval();
+            }
 
-        dots.forEach(dot => {
-            dot.addEventListener('click', () => {
-                showSlide(parseInt(dot.dataset.index));
-            });
-        });
+            // Initial slide
+            showSlide(0);
+            startInterval();
 
-        setInterval(() => {
-            let next = (current + 1) % slides.length;
-            showSlide(next);
-        }, 4000);
-
-        // Initial slide
-        showSlide(0);
+            // Cleanup
+            document.addEventListener('turbo:before-cache', () => {
+                clearInterval(intervalId);
+            }, { once: true });
+        })();
     </script>
     </body>
 
