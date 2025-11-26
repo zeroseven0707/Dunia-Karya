@@ -2,7 +2,8 @@
 
 @section('content')
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-    <h1 class="text-3xl font-bold mb-8">Keranjang Belanja</h1>
+    <h1 class="text-3xl font-extrabold mb-2 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Keranjang Belanja</h1>
+    <p class="text-gray-600 mb-8">Tinjau pesanan Anda sebelum checkout.</p>
 
     @if(session('success'))
         <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-6" role="alert">
@@ -11,7 +12,7 @@
     @endif
 
     @if($cart && $cart->items->count() > 0)
-        <div class="bg-white shadow-md rounded-lg overflow-hidden">
+        <div class="bg-white shadow-md rounded-lg overflow-hidden transition-shadow duration-300 hover:shadow-xl">
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
                     <tr>
@@ -48,7 +49,7 @@
                                 <form action="{{ route('cart.remove', $item->id) }}" method="POST">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="text-red-600 hover:text-red-900">Hapus</button>
+                                    <button type="submit" class="text-red-600 hover:text-red-900 transition transform active:scale-95">Hapus</button>
                                 </form>
                             </td>
                         </tr>
@@ -59,7 +60,7 @@
                 <div class="text-lg font-bold">
                     Total: Rp{{ number_format($cart->items->sum(function($item) { return ($item->product->discount_price ?? $item->product->price) * $item->quantity; }), 0, ',', '.') }}
                 </div>
-                <a href="{{ route('checkout.index') }}" class="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors">
+                <a href="{{ route('checkout.index') }}" class="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors transform active:scale-95 shadow-md hover:shadow-lg">
                     Checkout
                 </a>
             </div>

@@ -2,11 +2,12 @@
 
 @section('content')
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-    <h1 class="text-3xl font-bold mb-8">Checkout</h1>
+    <h1 class="text-3xl font-extrabold mb-2 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Checkout</h1>
+    <p class="text-gray-600 mb-8">Masukkan kode voucher bila ada, lalu selesaikan pembayaran.</p>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
         <!-- Order Summary -->
-        <div class="bg-white shadow-md rounded-lg p-6">
+        <div class="bg-white shadow-md rounded-lg p-6 transition transform hover:-translate-y-0.5 hover:shadow-xl duration-300">
             <h2 class="text-xl font-semibold mb-4">Ringkasan Pesanan</h2>
             <div class="space-y-4">
                 @foreach($cart->items as $item)
@@ -33,7 +34,7 @@
         </div>
 
         <!-- Payment Action -->
-        <div class="bg-white shadow-md rounded-lg p-6 h-fit">
+        <div class="bg-white shadow-md rounded-lg p-6 h-fit transition transform hover:-translate-y-0.5 hover:shadow-xl duration-300">
             <h2 class="text-xl font-semibold mb-4">Pembayaran</h2>
             <p class="text-gray-600 mb-6">Silakan selesaikan pembayaran Anda.</p>
 
@@ -45,7 +46,7 @@
                 <p id="voucher-feedback" class="mt-2 text-sm text-gray-500"></p>
             </div>
             
-            <button id="pay-button" class="w-full bg-blue-600 text-white py-3 rounded-md text-lg font-semibold hover:bg-blue-700 transition-colors">
+            <button id="pay-button" class="w-full bg-blue-600 text-white py-3 rounded-md text-lg font-semibold hover:bg-blue-700 transition-colors transform active:scale-95 shadow-md hover:shadow-lg">
                 Bayar Sekarang
             </button>
         </div>
@@ -63,6 +64,7 @@
         // Disable button to prevent double clicks
         payButton.disabled = true;
         payButton.textContent = 'Memproses...';
+        payButton.classList.add('animate-pulse');
         
         const voucherInput = document.getElementById('voucher-code');
         const voucherCode = voucherInput ? voucherInput.value.trim() : null;
@@ -79,6 +81,8 @@
             // Re-enable button
             payButton.disabled = false;
             payButton.textContent = 'Bayar Sekarang';
+            payButton.classList.remove('animate-pulse');
+            payButton.classList.remove('animate-pulse');
             
             const feedbackEl = document.getElementById('voucher-feedback');
             if (data.error) {
