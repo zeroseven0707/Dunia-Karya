@@ -172,7 +172,7 @@
 
 <!-- Scroll Reveal Script -->
 <script>
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('turbo:load', function(){
     const reveals = document.querySelectorAll('.scroll-reveal');
     
     const revealOnScroll = () => {
@@ -188,6 +188,10 @@ document.addEventListener('DOMContentLoaded', function() {
     
     window.addEventListener('scroll', revealOnScroll);
     revealOnScroll();
+
+    document.addEventListener('turbo:before-cache', function() {
+        window.removeEventListener('scroll', revealOnScroll);
+    }, { once: true });
 });
 </script>
 @endsection

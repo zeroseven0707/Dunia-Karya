@@ -36,7 +36,7 @@
     <link rel="stylesheet" href="{{ asset('css/animations.css') }}">
 </head>
 
-<body class="bg-gray-50 font-sans text-gray-900">
+<body class="bg-gray-50 font-sans text-gray-900 pt-24">
     @include('layouts.header')
     @yield('content')
     @include('layouts.footer')

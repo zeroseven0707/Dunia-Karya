@@ -21,6 +21,7 @@ use App\Http\Controllers\PaymentCallbackController;
 
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
 Route::post('/cart/add/{productId}', [CartController::class, 'addToCart'])->name('cart.add');
+Route::post('/cart/add-ajax/{productId}', [CartController::class, 'addToCartAjax'])->name('cart.add.ajax');
 Route::delete('/cart/remove/{itemId}', [CartController::class, 'remove'])->name('cart.remove');
 
 Route::middleware('auth')->group(function () {

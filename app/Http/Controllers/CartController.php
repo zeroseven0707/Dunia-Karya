@@ -45,6 +45,32 @@ class CartController extends Controller
         return redirect()->route('cart.index')->with('success', 'Produk berhasil ditambahkan ke keranjang!');
     }
 
+    public function addToCartAjax(Request $request, $productId)
+    {
+        $product = Product::findOrFail($productId);
+        $cart = $this->getCart();
+
+        $cartItem = $cart->items()->where('product_id', $productId)->first();
+
+        if ($cartItem) {
+            $cartItem->increment('quantity');
+        } else {
+            $cart->items()->create([
+                'product_id' => $productId,
+                'quantity' => 1
+            ]);
+        }
+
+        // Get updated cart count
+        $cartCount = $cart->items()->sum('quantity');
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Produk berhasil ditambahkan ke keranjang!',
+            'cartCount' => $cartCount
+        ]);
+    }
+
     public function remove($itemId)
     {
         CartItem::destroy($itemId);

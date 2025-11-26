@@ -1,13 +1,54 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="bg-white">
+
+<style>
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .animate-fade-in-up {
+        animation: fadeInUp 0.6s ease-out forwards;
+        opacity: 0;
+    }
+
+    .section-item {
+        opacity: 0;
+        animation: fadeInUp 0.6s ease-out forwards;
+    }
+
+    .section-item:nth-child(1) { animation-delay: 0.1s; }
+    .section-item:nth-child(2) { animation-delay: 0.15s; }
+    .section-item:nth-child(3) { animation-delay: 0.2s; }
+    .section-item:nth-child(4) { animation-delay: 0.25s; }
+    .section-item:nth-child(5) { animation-delay: 0.3s; }
+    .section-item:nth-child(6) { animation-delay: 0.35s; }
+    .section-item:nth-child(7) { animation-delay: 0.4s; }
+    .section-item:nth-child(8) { animation-delay: 0.45s; }
+    .section-item:nth-child(9) { animation-delay: 0.5s; }
+    .section-item:nth-child(10) { animation-delay: 0.55s; }
+</style>
+
+<div class="bg-gradient-to-b from-gray-50 to-white min-h-screen">
     <!-- Hero Section -->
-    <div class="bg-[#0A1E58] text-white py-16 text-center px-4">
-        <h1 class="text-4xl md:text-5xl font-bold mb-4">Syarat dan Ketentuan</h1>
-        <p class="text-lg md:text-xl text-blue-200 max-w-2xl mx-auto">
-            Harap baca syarat dan ketentuan ini dengan seksama sebelum menggunakan layanan kami.
-        </p>
+    <div class="relative bg-white border-b border-gray-100">
+        <div class="max-w-7xl mx-auto px-5 py-20 text-center">
+            <div class="animate-fade-in-up">
+                <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+                    Syarat dan <span class="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Ketentuan</span>
+                </h1>
+                <p class="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
+                    Harap baca syarat dan ketentuan ini dengan seksama sebelum menggunakan layanan kami.
+                </p>
+            </div>
+        </div>
     </div>
 
     <div class="max-w-4xl mx-auto px-5 py-16">
@@ -22,7 +63,7 @@
 
         <div class="prose max-w-none">
             <!-- Section 1 -->
-            <div class="mb-10">
+            <div class="mb-10 section-item">
                 <h2 class="text-2xl font-bold mb-4 text-[#0A1E58] border-b-2 border-blue-600 pb-2">1. Definisi</h2>
                 <div class="text-gray-700 leading-relaxed space-y-3">
                     <p>Dalam syarat dan ketentuan ini:</p>
@@ -37,7 +78,7 @@
             </div>
 
             <!-- Section 2 -->
-            <div class="mb-10">
+            <div class="mb-10 section-item">
                 <h2 class="text-2xl font-bold mb-4 text-[#0A1E58] border-b-2 border-blue-600 pb-2">2. Pendaftaran Akun</h2>
                 <div class="text-gray-700 leading-relaxed space-y-3">
                     <p>Untuk menggunakan layanan tertentu di Platform, Anda harus membuat akun dengan ketentuan:</p>

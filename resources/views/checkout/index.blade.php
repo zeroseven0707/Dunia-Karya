@@ -35,7 +35,7 @@
         <!-- Payment Action -->
         <div class="bg-white shadow-md rounded-lg p-6 h-fit">
             <h2 class="text-xl font-semibold mb-4">Pembayaran</h2>
-            <p class="text-gray-600 mb-6">Silakan selesaikan pembayaran Anda menggunakan Midtrans.</p>
+            <p class="text-gray-600 mb-6">Silakan selesaikan pembayaran Anda.</p>
             
             <button id="pay-button" class="w-full bg-blue-600 text-white py-3 rounded-md text-lg font-semibold hover:bg-blue-700 transition-colors">
                 Bayar Sekarang

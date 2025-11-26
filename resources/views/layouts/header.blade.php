@@ -1,5 +1,5 @@
     <!-- Main Navbar -->
-    <nav x-data="{ mobileMenuOpen: false }" class="bg-[#0A1E58] px-5 py-3 text-white relative">
+    <nav x-data="{ mobileMenuOpen: false }" class="fixed top-0 left-0 right-0 bg-[#0A1E58] px-5 py-3 text-white shadow-lg z-40">
         <!-- Tombol Hamburger (Mobile only) -->
         <div class="flex justify-between items-center md:hidden">
             <div class="space-x-1 text-lg font-semibold">
@@ -85,7 +85,9 @@
                             </svg>
                             {{-- Contoh badge jumlah item --}}
                             @if(isset($cartCount) && $cartCount > 0)
-                                <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-1.5 py-0.5 rounded-full">{{ $cartCount }}</span>
+                                <span data-cart-count class="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-1.5 py-0.5 rounded-full">{{ $cartCount }}</span>
+                            @else
+                                <span data-cart-count class="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-1.5 py-0.5 rounded-full hidden">0</span>
                             @endif
                         </a>
 
