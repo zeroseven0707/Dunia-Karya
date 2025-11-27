@@ -18,7 +18,10 @@ class ArticleForm
                 TextInput::make('title')
                     ->required(),
                 FileUpload::make('image')
-                    ->image(),
+                    ->image()
+                    ->disk('public')
+                    ->directory('articles/images')
+                    ->preserveFilenames(),
                 Textarea::make('excerpt')
                     ->columnSpanFull(),
                 RichEditor::make('content')

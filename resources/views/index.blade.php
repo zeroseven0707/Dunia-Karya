@@ -133,7 +133,7 @@
                 </div>
             @endforeach
         </div>
-        
+
         <!-- Navigation Dots -->
         <div class="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2 z-20" role="tablist"
             aria-label="Carousel Navigation">
@@ -301,7 +301,7 @@
     </div>
     @foreach ($banners as $key => $bannerItem)
         @if ($key == 2)
-            <img class="mt-7 rounded-xl shadow-md transition-transform duration-500 hover:scale-105 animate-on-scroll" 
+            <img class="mt-7 rounded-xl shadow-md transition-transform duration-500 hover:scale-105 animate-on-scroll"
                 src="{{ asset('storage/' . $bannerItem->path) }}" alt="{{ $bannerItem->alt }}">
         @endif
     @endforeach
@@ -314,7 +314,7 @@
         aria-label="Popular creators list">
         <div class="flex flex-wrap gap-3 text-sm">
             @foreach ($tags as $tag)
-                <a href="{{ route('tag.show', $tag->slug) }}" 
+                <a href="{{ route('tag.show', $tag->slug) }}"
                     class="tag-item px-3 py-1 border rounded-full hover:bg-slate-100 text-slate-700">
                     {{ $tag->name }}
                 </a>
@@ -359,7 +359,7 @@
     </div>
     @foreach ($banners as $key => $bannerItem)
         @if ($key == 1)
-            <img class="mt-7 rounded-xl shadow-md transition-transform duration-500 hover:scale-105 animate-on-scroll" 
+            <img class="mt-7 rounded-xl shadow-md transition-transform duration-500 hover:scale-105 animate-on-scroll"
                 src="{{ asset('storage/' . $bannerItem->path) }}" alt="{{ $bannerItem->alt }}">
         @endif
     @endforeach
