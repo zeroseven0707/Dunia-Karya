@@ -182,85 +182,84 @@
     </div>
 </section>
 
-<!-- Kategori Produk Digital -->
-<section aria-label="Kategori Produk Digital" class="max-w-7xl mx-auto px-5 py-6 animate-on-scroll">
-    <div class="bg-white p-8 shadow-md rounded-lg">
-        <h2 class="text-xl font-semibold mb-4 text-slate-800">Kategori Produk Digital</h2>
-        <div class="overflow-x-auto flex space-x-4 pb-4 gap-10 no-scrollbar">
-            <a href="{{ route('category.show', 'source-code') }}" class="category-item flex flex-col items-center group">
-                <div class="category-icon w-24 h-24 bg-gray-600 rounded-lg flex items-center justify-center shadow-md">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 7l-4 4-4-4" />
-                    </svg>
-                </div>
-                <span class="mt-2 text-sm font-medium text-gray-700 group-hover:text-gray-900 transition-colors">Source Code</span>
-            </a>
+<!-- Kategori Produk (match Products page) -->
+<section class="max-w-7xl mx-auto px-5 py-6">
+    <div class="mb-8 animate-fade-in-up" style="animation-delay: 0.2s;">
+        <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Kategori Produk</h2>
+        <div class="h-1 w-20 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full"></div>
+    </div>
 
-            <a href="{{ route('category.show', 'ebook') }}" class="category-item flex flex-col items-center group">
-                <div class="category-icon w-24 h-24 bg-gray-600 rounded-lg flex items-center justify-center shadow-md">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 20h9M3 4h18M3 8h18M3 12h18M3 16h18" />
-                    </svg>
-                </div>
-                <span class="mt-2 text-sm font-medium text-gray-700 group-hover:text-gray-900 transition-colors">Ebook</span>
-            </a>
+    <div class="scroll-container overflow-x-auto flex space-x-6 pb-4 no-scrollbar">
+        <div class="category-card stagger-item flex flex-col items-center min-w-[120px]">
+            <div class="category-icon w-28 h-28 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-14 h-14 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 7l-4 4-4-4" />
+                </svg>
+            </div>
+            <span class="mt-3 text-sm font-semibold text-gray-800">Source Code</span>
+        </div>
 
-            <a href="{{ route('category.show', 'ui-kit') }}" class="category-item flex flex-col items-center group">
-                <div class="category-icon w-24 h-24 bg-gray-600 rounded-lg flex items-center justify-center shadow-md">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <rect x="4" y="4" width="16" height="16" rx="2" ry="2" />
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M8 4v16" />
-                    </svg>
-                </div>
-                <span class="mt-2 text-sm font-medium text-gray-700 group-hover:text-gray-900 transition-colors">UI Kit</span>
-            </a>
+        <div class="category-card stagger-item flex flex-col items-center min-w-[120px]">
+            <div class="category-icon w-28 h-28 bg-gradient-to-br from-purple-600 to-pink-600 rounded-2xl flex items-center justify-center shadow-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-14 h-14 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                </svg>
+            </div>
+            <span class="mt-3 text-sm font-semibold text-gray-800">Ebook</span>
+        </div>
 
-            <a href="{{ route('category.show', 'plugin') }}" class="category-item flex flex-col items-center group">
-                <div class="category-icon w-24 h-24 bg-gray-600 rounded-lg flex items-center justify-center shadow-md">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <circle cx="12" cy="12" r="4" />
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2v4m0 12v4m10-10h-4m-12 0H2m15.07 6.93l-2.83-2.83M7.76 7.76l-2.83-2.83m0 11.31l2.83-2.83m11.31 0l-2.83 2.83" />
-                    </svg>
-                </div>
-                <span class="mt-2 text-sm font-medium text-gray-700 group-hover:text-gray-900 transition-colors">Plugin</span>
-            </a>
+        <div class="category-card stagger-item flex flex-col items-center min-w-[120px]">
+            <div class="category-icon w-28 h-28 bg-gradient-to-br from-green-600 to-teal-600 rounded-2xl flex items-center justify-center shadow-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-14 h-14 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h4a1 1 0 011 1v7a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM14 5a1 1 0 011-1h4a1 1 0 011 1v7a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM4 16a1 1 0 011-1h4a1 1 0 011 1v3a1 1 0 01-1 1H5a1 1 0 01-1-1v-3zM14 16a1 1 0 011-1h4a1 1 0 011 1v3a1 1 0 01-1 1h-4a1 1 0 01-1-1v-3z" />
+                </svg>
+            </div>
+            <span class="mt-3 text-sm font-semibold text-gray-800">UI Kit</span>
+        </div>
 
-            <a href="{{ route('category.show', 'voice-over') }}" class="category-item flex flex-col items-center group">
-                <div class="category-icon w-24 h-24 bg-gray-600 rounded-lg flex items-center justify-center shadow-md">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A2 2 0 0122 9.618v4.764a2 2 0 01-2.447 1.894L15 14m-6 0l-4.553 2.276A2 2 0 014 14.382V9.618a2 2 0 012.447-1.894L9 10m6 0V4m0 6l-6 4" />
-                    </svg>
-                </div>
-                <span class="mt-2 text-sm font-medium text-gray-700 group-hover:text-gray-900 transition-colors">Voice Over</span>
-            </a>
+        <div class="category-card stagger-item flex flex-col items-center min-w-[120px]">
+            <div class="category-icon w-28 h-28 bg-gradient-to-br from-orange-600 to-red-600 rounded-2xl flex items-center justify-center shadow-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-14 h-14 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z" />
+                </svg>
+            </div>
+            <span class="mt-3 text-sm font-semibold text-gray-800">Plugin</span>
+        </div>
 
-            <a href="{{ route('category.show', 'desain-grafis') }}" class="category-item flex flex-col items-center group">
-                <div class="category-icon w-24 h-24 bg-gray-600 rounded-lg flex items-center justify-center shadow-md">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9l9 6 9-6M3 15l9 6 9-6" />
-                    </svg>
-                </div>
-                <span class="mt-2 text-sm font-medium text-gray-700 group-hover:text-gray-900 transition-colors">Desain Grafis</span>
-            </a>
+        <div class="category-card stagger-item flex flex-col items-center min-w-[120px]">
+            <div class="category-icon w-28 h-28 bg-gradient-to-br from-cyan-600 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-14 h-14 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+                </svg>
+            </div>
+            <span class="mt-3 text-sm font-semibold text-gray-800">Voice Over</span>
+        </div>
 
-            <a href="{{ route('category.show', 'video-editing') }}" class="category-item flex flex-col items-center group">
-                <div class="category-icon w-24 h-24 bg-gray-600 rounded-lg flex items-center justify-center shadow-md">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A2 2 0 0122 9.618v4.764A2 2 0 0119.553 16l-4.553-2.276M4 6v12a2 2 0 002 2h8a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2z" />
-                    </svg>
-                </div>
-                <span class="mt-2 text-sm font-medium text-gray-700 group-hover:text-gray-900 transition-colors">Video Editing</span>
-            </a>
+        <div class="category-card stagger-item flex flex-col items-center min-w-[120px]">
+            <div class="category-icon w-28 h-28 bg-gradient-to-br from-pink-600 to-rose-600 rounded-2xl flex items-center justify-center shadow-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-14 h-14 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+                </svg>
+            </div>
+            <span class="mt-3 text-sm font-semibold text-gray-800">Desain Grafis</span>
+        </div>
 
-            <a href="{{ route('category.show', 'template-web') }}" class="category-item flex flex-col items-center group">
-                <div class="category-icon w-24 h-24 bg-gray-600 rounded-lg flex items-center justify-center shadow-md">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4h16v16H4V4zM4 12h16M12 4v16" />
-                    </svg>
-                </div>
-                <span class="mt-2 text-sm font-medium text-gray-700 group-hover:text-gray-900 transition-colors">Template Web</span>
-            </a>
+        <div class="category-card stagger-item flex flex-col items-center min-w-[120px]">
+            <div class="category-icon w-28 h-28 bg-gradient-to-br from-violet-600 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-14 h-14 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A2 2 0 0122 9.618v4.764A2 2 0 0119.553 16l-4.553-2.276M4 6v12a2 2 0 002 2h8a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2z" />
+                </svg>
+            </div>
+            <span class="mt-3 text-sm font-semibold text-gray-800">Video Editing</span>
+        </div>
+
+        <div class="category-card stagger-item flex flex-col items-center min-w-[120px]">
+            <div class="category-icon w-28 h-28 bg-gradient-to-br from-indigo-600 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-14 h-14 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+            </div>
+            <span class="mt-3 text-sm font-semibold text-gray-800">Template Web</span>
         </div>
     </div>
 </section>
