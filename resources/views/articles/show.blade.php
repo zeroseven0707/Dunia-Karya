@@ -3,8 +3,8 @@
 @section('title', $article->title . ' - Dunia Karya')
 
 @section('meta')
-    <meta name="description" content="{{ Str::limit(strip_tags($article->content), 150) }}">
-    <meta name="keywords" content="artikel, blog, dunia karya, {{ $article->title }}">
+    <meta name="description" content="{{ $article->seo_description ?? Str::limit(strip_tags($article->content), 150) }}">
+    <meta name="keywords" content="{{ $article->seo_keywords ?? ('artikel, blog, dunia karya, ' . $article->title) }}">
     <meta name="author" content="{{ $article->author ?? 'Dunia Karya' }}">
     
     <!-- Open Graph / Facebook -->
@@ -17,7 +17,7 @@
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="{{ $article->title }} - Dunia Karya" />
-    <meta name="twitter:description" content="{{ Str::limit(strip_tags($article->content), 150) }}" />
+    <meta name="twitter:description" content="{{ $article->seo_description ?? Str::limit(strip_tags($article->content), 150) }}" />
     <meta name="twitter:image" content="{{ asset('storage/' . $article->image) }}" />
 @endsection
 

@@ -24,6 +24,16 @@ class ArticleForm
                 RichEditor::make('content')
                 ->required()
                 ->columnSpanFull(),
+
+                TextInput::make('seo_keywords')
+                    ->label('SEO Keywords')
+                    ->helperText('Pisahkan dengan koma, misal: desain, template, dunia karya')
+                    ->columnSpanFull(),
+                Textarea::make('seo_description')
+                    ->label('SEO Meta Description')
+                    ->rows(3)
+                    ->columnSpanFull(),
+
                 DatePicker::make('date'),
             ]);
     }
