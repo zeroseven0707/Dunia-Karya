@@ -1,8 +1,6 @@
 @extends('layouts.app')
-
-@section('content')
-
-<style>
+@push('styles')
+    <style>
     /* Elegant Animations */
     @keyframes fadeInUp {
         from {
@@ -137,6 +135,19 @@
         background-clip: text;
     }
 </style>
+@endpush
+@section('content')
+@section('meta')
+<meta name="description" content="Hubungi Dunia Karya untuk pertanyaan, kerja sama, atau dukungan pelanggan. Kami siap membantu Anda.">
+<meta name="keywords" content="kontak dunia karya, hubungi kami, customer service">
+<meta name="author" content="Dunia Karya">
+<link rel="canonical" href="{{ url()->current() }}">
+
+<meta property="og:title" content="Hubungi Kami - Dunia Karya">
+<meta property="og:description" content="Butuh bantuan? Hubungi tim Dunia Karya melalui halaman kontak ini.">
+<meta property="og:image" content="{{ asset('img/og/og-banner-contact.png') }}">
+<meta property="og:type" content="website">
+@endsection
 
 <div class="bg-gradient-to-b from-gray-50 to-white min-h-screen">
     <!-- Hero Section - Elegant & Minimal -->
@@ -209,7 +220,7 @@
                             <h2 class="text-3xl font-bold text-gray-900 mb-3">Jam Operasional</h2>
                             <div class="h-1 w-16 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full"></div>
                         </div>
-                        
+
                         <p class="text-gray-600 mb-10 leading-relaxed">
                             Tim kami siap membantu Anda pada jam kerja berikut. Pesan di luar jam kerja akan dibalas pada hari kerja berikutnya.
                         </p>

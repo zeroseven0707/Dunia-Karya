@@ -1,8 +1,7 @@
 @extends('layouts.app')
 
-@section('content')
-
-<style>
+@push('styles')
+    <style>
     @keyframes fadeInUp {
         from {
             opacity: 0;
@@ -35,6 +34,17 @@
     .section-item:nth-child(9) { animation-delay: 0.5s; }
     .section-item:nth-child(10) { animation-delay: 0.55s; }
 </style>
+@endpush
+@section('content')
+@section('meta')
+<meta name="description" content="Syarat dan ketentuan penggunaan layanan, produk, dan website Dunia Karya.">
+<meta name="keywords" content="terms and conditions, syarat ketentuan">
+<meta name="author" content="Dunia Karya">
+
+<meta property="og:title" content="Syarat dan Ketentuan - Dunia Karya">
+<meta property="og:description" content="Baca syarat dan ketentuan penggunaan layanan Dunia Karya.">
+<meta property="og:image" content="{{ asset('img/og/og-banner-term-and-condition.png') }}">
+@endsection
 
 <div class="bg-gradient-to-b from-gray-50 to-white min-h-screen">
     <!-- Hero Section -->

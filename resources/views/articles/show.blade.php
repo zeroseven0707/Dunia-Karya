@@ -6,14 +6,14 @@
     <meta name="description" content="{{ $article->seo_description ?? Str::limit(strip_tags($article->content), 150) }}">
     <meta name="keywords" content="{{ $article->seo_keywords ?? ('artikel, blog, dunia karya, ' . $article->title) }}">
     <meta name="author" content="{{ $article->author ?? 'Dunia Karya' }}">
-    
+
     <!-- Open Graph / Facebook -->
     <meta property="og:title" content="{{ $article->title }} - Dunia Karya" />
     <meta property="og:description" content="{{ Str::limit(strip_tags($article->content), 150) }}" />
     <meta property="og:image" content="{{ asset('storage/' . $article->image) }}" />
     <meta property="og:url" content="{{ route('articles.show', $article->slug) }}" />
     <meta property="og:type" content="article" />
-    
+
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="{{ $article->title }} - Dunia Karya" />
@@ -180,7 +180,7 @@
 
         <!-- Back to Blog -->
         <div class="mt-12 text-center">
-            <a href="{{ route('articles.index') }}" 
+            <a href="{{ route('articles.index') }}"
                class="inline-flex items-center gap-2 px-8 py-4 bg-blue-600 text-white rounded-full font-semibold hover:bg-blue-700 transition-all hover-lift ripple">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
@@ -190,23 +190,24 @@
         </div>
     </main>
 </div>
-
-<!-- Scroll Reveal Script -->
+@endsection
+@push('scripts')
+    <!-- Scroll Reveal Script -->
 <script>
 document.addEventListener('turbo:load', function(){
     const reveals = document.querySelectorAll('.scroll-reveal');
-    
+
     const revealOnScroll = () => {
         reveals.forEach(element => {
             const elementTop = element.getBoundingClientRect().top;
             const elementVisible = 150;
-            
+
             if (elementTop < window.innerHeight - elementVisible) {
                 element.classList.add('revealed');
             }
         });
     };
-    
+
     window.addEventListener('scroll', revealOnScroll);
     revealOnScroll();
 
@@ -215,4 +216,4 @@ document.addEventListener('turbo:load', function(){
     }, { once: true });
 });
 </script>
-@endsection
+@endpush

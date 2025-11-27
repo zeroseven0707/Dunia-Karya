@@ -1,6 +1,17 @@
 @extends('layouts.app')
 
 @section('content')
+@section('meta')
+<meta name="description" content="Kumpulan artikel terbaru dari Dunia Karya. Temukan berbagai informasi, tips, dan wawasan seputar produk digital, bisnis online, website, dan teknologi.">
+<meta name="keywords" content="artikel, blog, dunia karya, informasi digital, tips bisnis online, produk digital">
+<meta name="author" content="Dunia Karya">
+
+<!-- Open Graph -->
+<meta property="og:title" content="Artikel & Blog - Dunia Karya">
+<meta property="og:description" content="Baca berbagai artikel menarik seputar produk digital, bisnis online, dan teknologi di Dunia Karya.">
+<meta property="og:image" content="{{ asset('img/og/og-banner-artikel.png') }}">
+<meta property="og:type" content="website">
+@endsection
 <div class="bg-gradient-to-b from-gray-50 to-white min-h-screen">
     <!-- Hero Section -->
     <div class="relative bg-white border-b border-gray-100">
@@ -33,10 +44,10 @@
                             <span class="w-2 h-8 bg-blue-600 mr-3 rounded"></span>
                             Artikel Pilihan
                         </h2>
-                        
+
                         <article class="grid grid-cols-1 lg:grid-cols-2 gap-8 bg-white rounded-2xl shadow-xl overflow-hidden hover-lift smooth-transition">
                             <a href="{{ route('articles.show', $headline->slug) }}" class="image-zoom-container h-full">
-                                <img src="{{ asset('storage/' . $headline->image) }}" 
+                                <img src="{{ asset('storage/' . $headline->image) }}"
                                      alt="{{ $headline->title }}"
                                      class="w-full h-full object-cover image-zoom min-h-[300px] lg:min-h-[400px]"
                                      onerror="this.onerror=null;this.src='https://placehold.co/800x600/0A1E58/FFFFFF?text=Featured+Article';" />
@@ -48,14 +59,14 @@
                                         {{ \Carbon\Carbon::parse($headline->date)->translatedFormat('d F Y') }}
                                     </span>
                                 </div>
-                                <a href="{{ route('articles.show', $headline->slug) }}" 
+                                <a href="{{ route('articles.show', $headline->slug) }}"
                                    class="text-3xl md:text-4xl font-bold text-gray-900 hover:text-blue-600 transition-colors mb-4 leading-tight">
                                     {{ $headline->title }}
                                 </a>
                                 <p class="text-gray-600 text-lg mb-6 line-clamp-3">
                                     {{ strip_tags(Str::limit($headline->excerpt ?? $headline->content, 200)) }}
                                 </p>
-                                <a href="{{ route('articles.show', $headline->slug) }}" 
+                                <a href="{{ route('articles.show', $headline->slug) }}"
                                    class="inline-flex items-center text-blue-600 font-semibold hover:text-blue-700 transition-colors group">
                                     Baca Selengkapnya
                                     <svg class="w-5 h-5 ml-2 group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -73,12 +84,12 @@
                             <span class="w-2 h-8 bg-blue-600 mr-3 rounded"></span>
                             Artikel Terbaru
                         </h2>
-                        
+
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             @foreach ($others as $index => $article)
                                 <article class="bg-white rounded-xl shadow-lg overflow-hidden hover-lift smooth-transition scroll-reveal delay-{{ min($index * 100, 500) }}">
                                     <a href="{{ route('articles.show', $article->slug) }}" class="image-zoom-container block h-56">
-                                        <img src="{{ asset('storage/' . $article->image) }}" 
+                                        <img src="{{ asset('storage/' . $article->image) }}"
                                              alt="{{ $article->title }}"
                                              class="w-full h-full object-cover image-zoom"
                                              onerror="this.onerror=null;this.src='https://placehold.co/600x400/0A1E58/FFFFFF?text=Article';" />
@@ -92,7 +103,7 @@
                                                 {{ \Carbon\Carbon::parse($article->date)->translatedFormat('d M Y') }}
                                             </span>
                                         </div>
-                                        <a href="{{ route('articles.show', $article->slug) }}" 
+                                        <a href="{{ route('articles.show', $article->slug) }}"
                                            class="text-xl font-bold text-gray-900 hover:text-blue-600 transition-colors line-clamp-2 mb-3 block">
                                             {{ $article->title }}
                                         </a>
@@ -101,7 +112,7 @@
                                         </p>
                                         <div class="flex items-center justify-between pt-4 border-t border-gray-100">
                                             <span class="text-sm text-gray-500">{{ $article->author ?? 'Redaksi' }}</span>
-                                            <a href="{{ route('articles.show', $article->slug) }}" 
+                                            <a href="{{ route('articles.show', $article->slug) }}"
                                                class="text-blue-600 hover:text-blue-700 font-semibold text-sm flex items-center group">
                                                 Baca
                                                 <svg class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -137,7 +148,7 @@
                         <h3 class="text-3xl font-bold mb-4">Jangan Lewatkan Update Terbaru!</h3>
                         <p class="text-blue-100 mb-8">Dapatkan artikel, tips, dan promo eksklusif langsung di inbox Anda</p>
                         <form class="flex flex-col sm:flex-row gap-4 justify-center">
-                            <input type="email" placeholder="Email Anda" 
+                            <input type="email" placeholder="Email Anda"
                                    class="px-6 py-3 rounded-full text-gray-900 focus:outline-none focus:ring-4 focus:ring-blue-300 flex-1 max-w-md">
                             <button type="submit" class="px-8 py-3 bg-white text-blue-600 rounded-full font-semibold hover:bg-gray-100 transition-colors ripple">
                                 Subscribe
@@ -157,8 +168,8 @@
                                 <div class="relative mb-4">
                                     <div class="w-20 h-20 rounded-full bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600 p-1">
                                         <div class="w-full h-full rounded-full bg-white p-1">
-                                            <img src="{{ asset('img/pp-instagram.png') }}" 
-                                                 alt="Dunia Karya" 
+                                            <img src="{{ asset('img/pp-instagram.png') }}"
+                                                 alt="Dunia Karya"
                                                  class="w-full h-full rounded-full object-cover">
                                         </div>
                                     </div>
@@ -181,8 +192,8 @@
                                 <div class="flex flex-col items-center gap-1 cursor-pointer group">
                                     <div class="w-16 h-16 rounded-full bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600 p-1 group-hover:scale-110 transition-transform">
                                         <div class="w-full h-full rounded-full bg-white p-1">
-                                            <img src="https://placehold.co/200x200/3B82F6/FFFFFF?text=Tips" 
-                                                 alt="Tips" 
+                                            <img src="https://placehold.co/200x200/3B82F6/FFFFFF?text=Tips"
+                                                 alt="Tips"
                                                  class="w-full h-full rounded-full object-cover">
                                         </div>
                                     </div>
@@ -191,8 +202,8 @@
                                 <div class="flex flex-col items-center gap-1 cursor-pointer group">
                                     <div class="w-16 h-16 rounded-full bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600 p-1 group-hover:scale-110 transition-transform">
                                         <div class="w-full h-full rounded-full bg-white p-1">
-                                            <img src="https://placehold.co/200x200/10B981/FFFFFF?text=Tutorial" 
-                                                 alt="Tutorial" 
+                                            <img src="https://placehold.co/200x200/10B981/FFFFFF?text=Tutorial"
+                                                 alt="Tutorial"
                                                  class="w-full h-full rounded-full object-cover">
                                         </div>
                                     </div>
@@ -201,8 +212,8 @@
                                 <div class="flex flex-col items-center gap-1 cursor-pointer group">
                                     <div class="w-16 h-16 rounded-full bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600 p-1 group-hover:scale-110 transition-transform">
                                         <div class="w-full h-full rounded-full bg-white p-1">
-                                            <img src="https://placehold.co/200x200/F59E0B/FFFFFF?text=Promo" 
-                                                 alt="Promo" 
+                                            <img src="https://placehold.co/200x200/F59E0B/FFFFFF?text=Promo"
+                                                 alt="Promo"
                                                  class="w-full h-full rounded-full object-cover">
                                         </div>
                                     </div>
@@ -211,8 +222,8 @@
                                 <div class="flex flex-col items-center gap-1 cursor-pointer group">
                                     <div class="w-16 h-16 rounded-full bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600 p-1 group-hover:scale-110 transition-transform">
                                         <div class="w-full h-full rounded-full bg-white p-1">
-                                            <img src="https://placehold.co/200x200/F59E0B/FFFFFF?text=Promo" 
-                                                 alt="Promo" 
+                                            <img src="https://placehold.co/200x200/F59E0B/FFFFFF?text=Promo"
+                                                 alt="Promo"
                                                  class="w-full h-full rounded-full object-cover">
                                         </div>
                                     </div>
@@ -234,38 +245,38 @@
                             </div>
                             <div class="grid grid-cols-3 gap-2">
                                 <div class="aspect-square rounded-lg overflow-hidden cursor-pointer group relative">
-                                    <img src="https://placehold.co/400x400/3B82F6/FFFFFF?text=1" 
-                                         alt="Post 1" 
+                                    <img src="https://placehold.co/400x400/3B82F6/FFFFFF?text=1"
+                                         alt="Post 1"
                                          class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
                                     <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-all"></div>
                                 </div>
                                 <div class="aspect-square rounded-lg overflow-hidden cursor-pointer group relative">
-                                    <img src="https://placehold.co/400x400/10B981/FFFFFF?text=2" 
-                                         alt="Post 2" 
+                                    <img src="https://placehold.co/400x400/10B981/FFFFFF?text=2"
+                                         alt="Post 2"
                                          class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
                                     <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-all"></div>
                                 </div>
                                 <div class="aspect-square rounded-lg overflow-hidden cursor-pointer group relative">
-                                    <img src="https://placehold.co/400x400/F59E0B/FFFFFF?text=3" 
-                                         alt="Post 3" 
+                                    <img src="https://placehold.co/400x400/F59E0B/FFFFFF?text=3"
+                                         alt="Post 3"
                                          class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
                                     <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-all"></div>
                                 </div>
                                 <div class="aspect-square rounded-lg overflow-hidden cursor-pointer group relative">
-                                    <img src="https://placehold.co/400x400/8B5CF6/FFFFFF?text=4" 
-                                         alt="Post 4" 
+                                    <img src="https://placehold.co/400x400/8B5CF6/FFFFFF?text=4"
+                                         alt="Post 4"
                                          class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
                                     <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-all"></div>
                                 </div>
                                 <div class="aspect-square rounded-lg overflow-hidden cursor-pointer group relative">
-                                    <img src="https://placehold.co/400x400/EF4444/FFFFFF?text=5" 
-                                         alt="Post 5" 
+                                    <img src="https://placehold.co/400x400/EF4444/FFFFFF?text=5"
+                                         alt="Post 5"
                                          class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
                                     <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-all"></div>
                                 </div>
                                 <div class="aspect-square rounded-lg overflow-hidden cursor-pointer group relative">
-                                    <img src="https://placehold.co/400x400/06B6D4/FFFFFF?text=6" 
-                                         alt="Post 6" 
+                                    <img src="https://placehold.co/400x400/06B6D4/FFFFFF?text=6"
+                                         alt="Post 6"
                                          class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
                                     <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-all"></div>
                                 </div>
@@ -277,23 +288,23 @@
         </div>
     </main>
 </div>
-
-<!-- Scroll Reveal Script -->
-<script>
+@endsection
+@push('scripts')
+    <script>
 (function() {
     const reveals = document.querySelectorAll('.scroll-reveal');
-    
+
     const revealOnScroll = () => {
         reveals.forEach(element => {
             const elementTop = element.getBoundingClientRect().top;
             const elementVisible = 150;
-            
+
             if (elementTop < window.innerHeight - elementVisible) {
                 element.classList.add('revealed');
             }
         });
     };
-    
+
     window.addEventListener('scroll', revealOnScroll);
     revealOnScroll(); // Initial check
 
@@ -302,4 +313,4 @@
     }, { once: true });
 })();
 </script>
-@endsection
+@endpush

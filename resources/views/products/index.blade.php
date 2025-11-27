@@ -1,7 +1,6 @@
 @extends('layouts.app')
-@section('content')
-
-<style>
+@push('styles')
+    <style>
     /* Smooth Animations */
     @keyframes fadeInUp {
         from {
@@ -169,7 +168,20 @@
         pointer-events: none;
     }
 </style>
+@endpush
+@section('content')
 
+@section('meta')
+<meta name="description" content="Temukan berbagai produk digital berkualitas dari Dunia Karya. Mulai dari template website, desain, tools digital, hingga aset siap pakai untuk kebutuhan bisnismu.">
+<meta name="keywords" content="produk digital, template website, aset digital, tools digital, dunia karya, produk online">
+<meta name="author" content="Dunia Karya">
+
+<!-- Open Graph -->
+<meta property="og:title" content="Produk Digital - Dunia Karya">
+<meta property="og:description" content="Jelajahi berbagai produk digital yang siap membantu kebutuhan bisnismu. Praktis, modern, dan mudah digunakan.">
+<meta property="og:image" content="{{ asset('img/og/og-banner-produk-digital.png') }}">
+<meta property="og:type" content="website">
+@endsection
 <!-- Kategori Produk Digital -->
 <section aria-label="Kategori Produk Digital" class="max-w-7xl mx-auto px-5 py-6 animate-fade-in-up">
     <div class="bg-gradient-to-br from-white to-blue-50 p-8 shadow-xl rounded-2xl border border-blue-100">
@@ -208,7 +220,7 @@
                 <div class="category-icon w-28 h-28 bg-gradient-to-br from-green-600 to-teal-600 rounded-2xl flex items-center justify-center shadow-lg">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-14 h-14 text-white" fill="none"
                         viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M4 5a1 1 0 011-1h4a1 1 0 011 1v7a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM14 5a1 1 0 011-1h4a1 1 0 011 1v7a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM4 16a1 1 0 011-1h4a1 1 0 011 1v3a1 1 0 01-1 1H5a1 1 0 01-1-1v-3zM14 16a1 1 0 011-1h4a1 1 0 011 1v3a1 1 0 01-1 1h-4a1 1 0 01-1-1v-3z" />
                     </svg>
                 </div>
@@ -340,7 +352,8 @@
         @endforeach
     </div>
 </section>
-
+@endsection
+@push('scripts')
 <script>
 // Smooth scroll reveal on load
 document.addEventListener('turbo:load', function() {
@@ -369,5 +382,4 @@ document.addEventListener('turbo:load', function() {
     }, { once: true });
 });
 </script>
-
-@endsection
+@endpush

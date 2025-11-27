@@ -45,27 +45,28 @@
                 </div>
                 <p id="voucher-feedback" class="mt-2 text-sm text-gray-500"></p>
             </div>
-            
+
             <button id="pay-button" class="w-full bg-blue-600 text-white py-3 rounded-md text-lg font-semibold hover:bg-blue-700 transition-colors transform active:scale-95 shadow-md hover:shadow-lg">
                 Bayar Sekarang
             </button>
         </div>
     </div>
 </div>
-
-<script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ config('midtrans.client_key') }}"></script>
+@endsection
+@push('scripts')
+    <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ config('midtrans.client_key') }}"></script>
 <script type="text/javascript">
 (function() {
     const payButton = document.getElementById('pay-button');
-    
+
     if (!payButton) return;
-    
+
     function handlePayment() {
         // Disable button to prevent double clicks
         payButton.disabled = true;
         payButton.textContent = 'Memproses...';
         payButton.classList.add('animate-pulse');
-        
+
         const voucherInput = document.getElementById('voucher-code');
         const voucherCode = voucherInput ? voucherInput.value.trim() : null;
         fetch('{{ route('checkout.process') }}', {
@@ -83,7 +84,7 @@
             payButton.textContent = 'Bayar Sekarang';
             payButton.classList.remove('animate-pulse');
             payButton.classList.remove('animate-pulse');
-            
+
             const feedbackEl = document.getElementById('voucher-feedback');
             if (data.error) {
                 if (feedbackEl) {
@@ -122,18 +123,18 @@
             // Re-enable button
             payButton.disabled = false;
             payButton.textContent = 'Bayar Sekarang';
-            
+
             console.error('Fetch error:', error);
             alert('Terjadi kesalahan. Silakan coba lagi.');
         });
     }
-    
+
     payButton.addEventListener('click', handlePayment);
-    
+
     // Cleanup on Turbo navigation
     document.addEventListener('turbo:before-cache', function() {
         payButton.removeEventListener('click', handlePayment);
     }, { once: true });
 })();
 </script>
-@endsection
+@endpush

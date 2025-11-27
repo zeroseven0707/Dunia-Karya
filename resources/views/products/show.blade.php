@@ -6,14 +6,14 @@
     <meta name="description" content="{{ Str::limit(strip_tags($product->description), 150) }}">
     <meta name="keywords" content="produk digital, {{ $product->title }}, dunia karya, beli {{ $product->name }}">
     <meta name="author" content="Dunia Karya">
-    
+
     <!-- Open Graph / Facebook -->
     <meta property="og:title" content="{{ $product->title }} - Dunia Karya" />
     <meta property="og:description" content="{{ Str::limit(strip_tags($product->description), 150) }}" />
     <meta property="og:image" content="{{ asset('storage/' . $product->thumbnail) }}" />
     <meta property="og:url" content="{{ route('product.show', $product->id) }}" />
     <meta property="og:type" content="product" />
-    
+
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="{{ $product->title }} - Dunia Karya" />
@@ -21,9 +21,8 @@
     <meta name="twitter:image" content="{{ asset('storage/' . $product->thumbnail) }}" />
 @endsection
 
-@section('content')
-
-<style>
+@push('styles')
+    <style>
     /* Modern Animations */
     @keyframes fadeInUp {
         from {
@@ -228,12 +227,15 @@
         animation: cartBounce 0.5s ease-in-out;
     }
 </style>
+@endpush
+
+@section('content')
 
 <!-- Main content -->
 <section class="mx-auto max-w-7xl px-5 py-8 md:py-12">
     <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 p-6 md:p-10">
-            
+
             <!-- Product Image -->
             <div class="animate-slide-left">
                 <div class="product-image-wrapper">
@@ -244,10 +246,10 @@
                             </span>
                         </div>
                     @endif
-                    <img id="main-product-image" 
+                    <img id="main-product-image"
                         src="{{ asset('storage/' . $product->thumbnail) }}"
-                        alt="Thumbnail {{ $product->title }}" 
-                        class="w-full h-full object-cover rounded-xl" 
+                        alt="Thumbnail {{ $product->title }}"
+                        class="w-full h-full object-cover rounded-xl"
                         loading="lazy"
                         onerror="this.onerror=null;this.src='https://placehold.co/600x400?text=No+Image';" />
                 </div>
@@ -310,7 +312,7 @@
                             </span>
                         </button>
                     </form>
-                    
+
                     <!-- Secondary Actions: Cart & Demo -->
                     <div class="flex gap-3">
                         <!-- Add to Cart - Icon Only -->
@@ -392,11 +394,11 @@
         <h3 class="text-2xl md:text-3xl font-bold text-gray-900">Produk Digital Terkait</h3>
         <div class="h-1 flex-1 ml-6 bg-gradient-to-r from-blue-500 to-transparent rounded-full"></div>
     </div>
-    
+
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         @foreach ($relatedProducts as $index => $related)
-            <a href="{{ route('product.show', $related->slug) }}" 
-                class="related-card stagger-item bg-white rounded-xl shadow-md hover:shadow-2xl" 
+            <a href="{{ route('product.show', $related->slug) }}"
+                class="related-card stagger-item bg-white rounded-xl shadow-md hover:shadow-2xl"
                 tabindex="0"
                 aria-label="Lihat detail produk {{ $related->title }}">
                 <div class="h-48 overflow-hidden rounded-t-xl relative">
@@ -407,9 +409,9 @@
                             </span>
                         </div>
                     @endif
-                    <img src="{{ asset('storage/' . $related->thumbnail) }}" 
+                    <img src="{{ asset('storage/' . $related->thumbnail) }}"
                         alt="Thumbnail {{ $related->title }}"
-                        class="w-full h-full object-cover" 
+                        class="w-full h-full object-cover"
                         loading="lazy"
                         onerror="this.onerror=null;this.src='https://placehold.co/400x192?text=No+Image';" />
                 </div>
@@ -437,154 +439,155 @@
     </div>
 </section>
 
+@endsection
+@push('scripts')
 <script>
-(function() {
-    const cartButton = document.getElementById('cart-button');
-    const addToCartUrl = '{{ route('cart.add.ajax', $product->id) }}';
-    
-    if (cartButton) {
-        cartButton.addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            // Get button position
-            const buttonRect = cartButton.getBoundingClientRect();
-            
-            // Find cart icon in header first
-            const headerCart = document.querySelector('a[href*="cart"]') || document.querySelector('[data-cart-icon]');
-            
-            if (!headerCart) {
-                console.error('Cart icon not found in header');
-                return;
-            }
-            
-            const cartRect = headerCart.getBoundingClientRect();
-            const deltaX = cartRect.left - buttonRect.left;
-            const deltaY = cartRect.top - buttonRect.top;
-            
-            // Create unique animation name
-            const animationName = 'flyToCart' + Date.now();
-            
-            // Create dynamic keyframe animation
-            const styleSheet = document.createElement('style');
-            styleSheet.textContent = `
-                @keyframes ${animationName} {
-                    0% {
-                        opacity: 1;
-                        transform: translate(0, 0) scale(1) rotate(0deg);
-                    }
-                    50% {
-                        opacity: 1;
-                        transform: translate(${deltaX * 0.5}px, ${deltaY * 0.5 - 50}px) scale(1.5) rotate(180deg);
-                    }
-                    100% {
-                        opacity: 0;
-                        transform: translate(${deltaX}px, ${deltaY}px) scale(0.3) rotate(360deg);
-                    }
+    (function() {
+        const cartButton = document.getElementById('cart-button');
+        const addToCartUrl = '{{ route('cart.add.ajax', $product->id) }}';
+
+        if (cartButton) {
+            cartButton.addEventListener('click', function(e) {
+                e.preventDefault();
+
+                // Get button position
+                const buttonRect = cartButton.getBoundingClientRect();
+
+                // Find cart icon in header first
+                const headerCart = document.querySelector('a[href*="cart"]') || document.querySelector('[data-cart-icon]');
+
+                if (!headerCart) {
+                    console.error('Cart icon not found in header');
+                    return;
                 }
-            `;
-            document.head.appendChild(styleSheet);
-            
-            // Create flying cart icon
-            const flyingCart = document.createElement('div');
-            flyingCart.className = 'flying-cart';
-            flyingCart.style.animation = `${animationName} 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards`;
-            flyingCart.innerHTML = `
-                <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                </svg>
-            `;
-            
-            // Set initial position (center of button)
-            flyingCart.style.left = (buttonRect.left + buttonRect.width / 2 - 16) + 'px'; // -16 to center the 32px icon
-            flyingCart.style.top = (buttonRect.top + buttonRect.height / 2 - 16) + 'px';
-            
-            document.body.appendChild(flyingCart);
-            
-            // Add shake animation to button
-            cartButton.classList.add('cart-shake');
-            setTimeout(() => {
-                cartButton.classList.remove('cart-shake');
-            }, 500);
-            
-            // Add bounce animation to header cart and update count when animation completes
-            setTimeout(() => {
-                headerCart.classList.add('cart-bounce');
-                
-                // Update cart count via AJAX
-                fetch(addToCartUrl, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                        'Accept': 'application/json'
-                    },
-                    body: JSON.stringify({})
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        // Update cart count badge
-                        const cartBadge = headerCart.querySelector('[data-cart-count]');
-                        
-                        if (cartBadge) {
-                            // Show badge if hidden
-                            if (cartBadge.classList.contains('hidden')) {
-                                cartBadge.classList.remove('hidden');
-                            }
-                            
-                            cartBadge.textContent = data.cartCount;
-                            // Add pulse animation to badge
-                            cartBadge.classList.add('cart-bounce');
-                            setTimeout(() => {
-                                cartBadge.classList.remove('cart-bounce');
-                            }, 500);
+
+                const cartRect = headerCart.getBoundingClientRect();
+                const deltaX = cartRect.left - buttonRect.left;
+                const deltaY = cartRect.top - buttonRect.top;
+
+                // Create unique animation name
+                const animationName = 'flyToCart' + Date.now();
+
+                // Create dynamic keyframe animation
+                const styleSheet = document.createElement('style');
+                styleSheet.textContent = `
+                    @keyframes ${animationName} {
+                        0% {
+                            opacity: 1;
+                            transform: translate(0, 0) scale(1) rotate(0deg);
+                        }
+                        50% {
+                            opacity: 1;
+                            transform: translate(${deltaX * 0.5}px, ${deltaY * 0.5 - 50}px) scale(1.5) rotate(180deg);
+                        }
+                        100% {
+                            opacity: 0;
+                            transform: translate(${deltaX}px, ${deltaY}px) scale(0.3) rotate(360deg);
                         }
                     }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    showNotification('Terjadi kesalahan. Silakan coba lagi.', 'error');
-                });
-                
+                `;
+                document.head.appendChild(styleSheet);
+
+                // Create flying cart icon
+                const flyingCart = document.createElement('div');
+                flyingCart.className = 'flying-cart';
+                flyingCart.style.animation = `${animationName} 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards`;
+                flyingCart.innerHTML = `
+                    <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                    </svg>
+                `;
+
+                // Set initial position (center of button)
+                flyingCart.style.left = (buttonRect.left + buttonRect.width / 2 - 16) + 'px'; // -16 to center the 32px icon
+                flyingCart.style.top = (buttonRect.top + buttonRect.height / 2 - 16) + 'px';
+
+                document.body.appendChild(flyingCart);
+
+                // Add shake animation to button
+                cartButton.classList.add('cart-shake');
                 setTimeout(() => {
-                    headerCart.classList.remove('cart-bounce');
+                    cartButton.classList.remove('cart-shake');
                 }, 500);
-            }, 1000); // Changed from 800ms to 1000ms to match animation completion
-            
-            // Remove flying cart and stylesheet after animation
-            setTimeout(() => {
-                flyingCart.remove();
-                styleSheet.remove();
-            }, 1100);
-        });
-    }
-    
-    // Simple notification function
-    function showNotification(message, type = 'error') {
-        const notification = document.createElement('div');
-        notification.className = `fixed top-4 right-4 z-50 px-6 py-3 rounded-lg shadow-lg transform transition-all duration-300 bg-red-500 text-white font-semibold`;
-        notification.textContent = message;
-        notification.style.transform = 'translateY(-100px)';
-        notification.style.opacity = '0';
-        
-        document.body.appendChild(notification);
-        
-        // Animate in
-        setTimeout(() => {
-            notification.style.transform = 'translateY(0)';
-            notification.style.opacity = '1';
-        }, 10);
-        
-        // Remove after 3 seconds
-        setTimeout(() => {
+
+                // Add bounce animation to header cart and update count when animation completes
+                setTimeout(() => {
+                    headerCart.classList.add('cart-bounce');
+
+                    // Update cart count via AJAX
+                    fetch(addToCartUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify({})
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Update cart count badge
+                            const cartBadge = headerCart.querySelector('[data-cart-count]');
+
+                            if (cartBadge) {
+                                // Show badge if hidden
+                                if (cartBadge.classList.contains('hidden')) {
+                                    cartBadge.classList.remove('hidden');
+                                }
+
+                                cartBadge.textContent = data.cartCount;
+                                // Add pulse animation to badge
+                                cartBadge.classList.add('cart-bounce');
+                                setTimeout(() => {
+                                    cartBadge.classList.remove('cart-bounce');
+                                }, 500);
+                            }
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        showNotification('Terjadi kesalahan. Silakan coba lagi.', 'error');
+                    });
+
+                    setTimeout(() => {
+                        headerCart.classList.remove('cart-bounce');
+                    }, 500);
+                }, 1000); // Changed from 800ms to 1000ms to match animation completion
+
+                // Remove flying cart and stylesheet after animation
+                setTimeout(() => {
+                    flyingCart.remove();
+                    styleSheet.remove();
+                }, 1100);
+            });
+        }
+
+        // Simple notification function
+        function showNotification(message, type = 'error') {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 z-50 px-6 py-3 rounded-lg shadow-lg transform transition-all duration-300 bg-red-500 text-white font-semibold`;
+            notification.textContent = message;
             notification.style.transform = 'translateY(-100px)';
             notification.style.opacity = '0';
-            setTimeout(() => {
-                notification.remove();
-            }, 300);
-        }, 3000);
-    }
-})();
-</script>
 
-@endsection
+            document.body.appendChild(notification);
+
+            // Animate in
+            setTimeout(() => {
+                notification.style.transform = 'translateY(0)';
+                notification.style.opacity = '1';
+            }, 10);
+
+            // Remove after 3 seconds
+            setTimeout(() => {
+                notification.style.transform = 'translateY(-100px)';
+                notification.style.opacity = '0';
+                setTimeout(() => {
+                    notification.remove();
+                }, 300);
+            }, 3000);
+        }
+    })();
+</script>
+@endpush

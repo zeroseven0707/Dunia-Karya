@@ -1,7 +1,6 @@
 @extends('layouts.app')
-@section('content')
-
-<style>
+@push('styles')
+    <style>
     /* Smooth Animations */
     @keyframes fadeInUp {
         from {
@@ -117,7 +116,8 @@
     .stagger-item:nth-child(7) { animation-delay: 0.7s; }
     .stagger-item:nth-child(8) { animation-delay: 0.8s; }
 </style>
-
+@endpush
+@section('content')
 <!-- Carousel Banner -->
 <section class="mx-auto max-w-7xl px-5 py-6 select-none animate-on-scroll">
     <div class="relative rounded-lg overflow-hidden shadow-lg group">
@@ -364,8 +364,9 @@
         @endif
     @endforeach
 </section>
-
-<script>
+@endsection
+@push('scripts')
+    <script>
 // Scroll Animation Observer
 (function() {
     const observerOptions = {
@@ -391,5 +392,4 @@
     }, { once: true });
 })();
 </script>
-
-@endsection
+@endpush

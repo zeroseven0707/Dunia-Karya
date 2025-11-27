@@ -1,8 +1,6 @@
 @extends('layouts.app')
-
-@section('content')
-
-<style>
+@push('styles')
+    <style>
     /* Smooth Animations */
     @keyframes fadeInUp {
         from {
@@ -75,6 +73,17 @@
         max-height: 1000px;
     }
 </style>
+@endpush
+@section('content')
+@section('meta')
+<meta name="description" content="Temukan jawaban atas pertanyaan umum seputar produk digital, pembayaran, dan layanan Dunia Karya.">
+<meta name="keywords" content="faq, pertanyaan umum, bantuan dunia karya">
+<meta name="author" content="Dunia Karya">
+
+<meta property="og:title" content="FAQ - Dunia Karya">
+<meta property="og:description" content="Pertanyaan umum dan jawabannya mengenai layanan Dunia Karya.">
+<meta property="og:image" content="{{ asset('img/og/og-banner-faq.png') }}">
+@endsection
 
 <div class="bg-gradient-to-b from-gray-50 to-white min-h-screen">
     <!-- Hero Section -->

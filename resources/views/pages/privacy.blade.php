@@ -1,8 +1,6 @@
 @extends('layouts.app')
-
-@section('content')
-
-<style>
+@push('styles')
+    <style>
     @keyframes fadeInUp {
         from {
             opacity: 0;
@@ -36,6 +34,17 @@
     .section-item:nth-child(10) { animation-delay: 0.55s; }
     .section-item:nth-child(11) { animation-delay: 0.6s; }
 </style>
+@endpush
+@section('content')
+@section('meta')
+<meta name="description" content="Kebijakan privasi Dunia Karya dalam mengelola data pengguna dan keamanan informasi.">
+<meta name="keywords" content="privacy policy, kebijakan privasi, keamanan data">
+<meta name="author" content="Dunia Karya">
+
+<meta property="og:title" content="Kebijakan Privasi - Dunia Karya">
+<meta property="og:description" content="Pelajari bagaimana Dunia Karya melindungi data dan privasi Anda.">
+<meta property="og:image" content="{{ asset('img/og/og-banner-privacy-policy.png') }}">
+@endsection
 
 <div class="bg-gradient-to-b from-gray-50 to-white min-h-screen">
     <!-- Hero Section -->
@@ -115,7 +124,7 @@
                 <h2 class="text-2xl font-bold mb-4 text-[#0A1E58] border-b-2 border-blue-600 pb-2">3. Pembagian Informasi</h2>
                 <div class="text-gray-700 leading-relaxed space-y-3">
                     <p>Kami TIDAK menjual informasi pribadi Anda kepada pihak ketiga. Kami hanya membagikan informasi dalam situasi berikut:</p>
-                    
+
                     <h3 class="text-lg font-semibold text-gray-900 mt-4">3.1 Penyedia Layanan</h3>
                     <p>Kami dapat membagikan informasi dengan penyedia layanan pihak ketiga yang membantu kami mengoperasikan Platform:</p>
                     <ul class="list-disc ml-6 space-y-2">

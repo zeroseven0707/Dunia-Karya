@@ -110,7 +110,7 @@
                     </svg>
                     Blog
                 </button>
-                
+
                 {{-- Tombol Keranjang (Visible to all) --}}
                 <div class="flex items-center gap-4 px-3">
                     <a href="{{ url('cart') }}" class="relative">
@@ -180,7 +180,7 @@
         </div> <!-- End Navbar Content -->
 
         <!-- Mobile Sidebar Overlay -->
-        <div x-show="mobileMenuOpen" 
+        <div x-show="mobileMenuOpen"
              x-transition:enter="transition-opacity ease-linear duration-300"
              x-transition:enter-start="opacity-0"
              x-transition:enter-end="opacity-100"
@@ -202,7 +202,7 @@
              x-transition:leave-end="-translate-x-full"
              class="fixed inset-y-0 left-0 z-50 w-64 bg-[#0A1E58] shadow-lg overflow-y-auto md:hidden flex flex-col p-5 gap-6"
              style="display: none;">
-             
+
              <!-- Header Sidebar -->
              <div class="flex items-center justify-between">
                  <img src="{{ asset('img/logo.png') }}" alt="Logo" class="h-8 w-auto">
