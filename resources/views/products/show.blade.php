@@ -453,8 +453,20 @@
                 // Get button position
                 const buttonRect = cartButton.getBoundingClientRect();
 
-                // Find cart icon in header first
-                const headerCart = document.querySelector('a[href*="cart"]') || document.querySelector('[data-cart-icon]');
+                // Find visible cart icon (prefer desktop header)
+                function isVisible(el) {
+                    if (!el) return false;
+                    const style = window.getComputedStyle(el);
+                    const rect = el.getBoundingClientRect();
+                    return style.display !== 'none' && style.visibility !== 'hidden' && rect.width > 0 && rect.height > 0;
+                }
+
+                const candidates = [
+                    document.querySelector('#navbarContent a[href*="cart"]'),
+                    ...Array.from(document.querySelectorAll('a[href*="cart"], [data-cart-icon]')),
+                ].filter(Boolean);
+
+                const headerCart = candidates.find(isVisible) || candidates[0];
 
                 if (!headerCart) {
                     console.error('Cart icon not found in header');

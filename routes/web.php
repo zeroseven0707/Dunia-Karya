@@ -27,6 +27,7 @@ Route::delete('/cart/remove/{itemId}', [CartController::class, 'remove'])->name(
 Route::middleware('auth')->group(function () {
     Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
     Route::post('/checkout/process', [CheckoutController::class, 'process'])->name('checkout.process');
+    Route::post('/checkout/repay/{order}', [CheckoutController::class, 'repay'])->name('checkout.repay');
     Route::get('/my-purchases', [CheckoutController::class, 'purchases'])->name('purchases.index');
 });
 
@@ -40,7 +41,7 @@ Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
 Route::middleware('auth')->group(function () {
     Route::get('/purchases', [CheckoutController::class, 'purchases'])->name('purchases');
     Route::get('/download/{file}', [App\Http\Controllers\DownloadController::class, 'download'])->name('download.file');
-    
+
     Route::get('/profile/setting', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');

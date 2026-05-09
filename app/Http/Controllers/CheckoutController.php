@@ -22,6 +22,14 @@ class CheckoutController extends Controller
         Config::$isProduction = config('midtrans.is_production');
         Config::$isSanitized = config('midtrans.is_sanitized');
         Config::$is3ds = config('midtrans.is_3ds');
+
+        // Disable SSL verification on local environment to avoid cURL SSL certificate issues
+        if (app()->environment('local')) {
+            Config::$curlOptions = [
+                CURLOPT_SSL_VERIFYHOST => 0,
+                CURLOPT_SSL_VERIFYPEER => false,
+            ];
+        }
     }
 
     public function index()
@@ -84,9 +92,8 @@ class CheckoutController extends Controller
             'user_id' => Auth::id(),
             'total_price' => $totalPrice,
             'status' => 'pending',
-            'payment_method' => 'midtrans', // Default for now
-            'payment_ref' => 'ORD-' . strtoupper(Str::random(10)), // Temporary ref
-            'paid_at' => null,
+            'payment_method' => 'midtrans',
+            'payment_ref' => 'ORD-' . strtoupper(Str::random(10)),
             'expires_at' => now()->addDay(), // 24 hours expiry
         ]);
 
@@ -124,12 +131,6 @@ class CheckoutController extends Controller
             ]
         ];
 
-        // Set notification URL (for production)
-        Config::$serverKey = config('midtrans.server_key');
-        Config::$isProduction = config('midtrans.is_production');
-        Config::$isSanitized = config('midtrans.is_sanitized');
-        Config::$is3ds = config('midtrans.is_3ds');
-        
         // Only set notification URL if in production or if APP_URL is set
         if (config('app.url') && config('app.url') !== 'http://localhost') {
             Config::$overrideNotifUrl = config('app.url') . '/api/midtrans/callback';
@@ -137,7 +138,7 @@ class CheckoutController extends Controller
 
         try {
             $snapToken = Snap::getSnapToken($params);
-            
+
             return response()->json(['snap_token' => $snapToken, 'order_id' => $order->id]);
 
         } catch (\Exception $e) {
@@ -147,10 +148,64 @@ class CheckoutController extends Controller
                 'user_id' => Auth::id(),
                 'trace' => $e->getTraceAsString()
             ]);
-            
+
             return response()->json([
                 'error' => 'Terjadi kesalahan saat memproses pembayaran.',
                 'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function repay(Request $request, $orderId)
+    {
+        $order = Order::where('id', $orderId)
+            ->where('user_id', Auth::id())
+            ->where('status', 'pending')
+            ->with('items.product')
+            ->firstOrFail();
+
+        $itemDetails = $order->items->map(function ($item) {
+            return [
+                'id'       => $item->product_id,
+                'price'    => (int) $item->price,
+                'quantity' => $item->quantity,
+                'name'     => substr($item->product->title, 0, 50),
+            ];
+        })->toArray();
+
+        $params = [
+            'transaction_details' => [
+                'order_id'     => $order->id,
+                'gross_amount' => (int) $order->total_price,
+            ],
+            'customer_details' => [
+                'first_name' => Auth::user()->name,
+                'email'      => Auth::user()->email,
+            ],
+            'item_details' => $itemDetails,
+            'callbacks'    => [
+                'finish' => route('purchases'),
+            ],
+        ];
+
+        if (config('app.url') && config('app.url') !== 'http://localhost') {
+            Config::$overrideNotifUrl = config('app.url') . '/api/midtrans/callback';
+        }
+
+        try {
+            $snapToken = Snap::getSnapToken($params);
+
+            return response()->json(['snap_token' => $snapToken, 'order_id' => $order->id]);
+
+        } catch (\Exception $e) {
+            \Log::error('Midtrans Repay Error: ' . $e->getMessage(), [
+                'order_id' => $order->id,
+                'user_id'  => Auth::id(),
+            ]);
+
+            return response()->json([
+                'error'   => 'Terjadi kesalahan saat memproses pembayaran.',
+                'message' => $e->getMessage(),
             ], 500);
         }
     }
@@ -161,7 +216,7 @@ class CheckoutController extends Controller
             ->with('items.product.files')
             ->latest()
             ->get();
-            
+
         return view('purchases.index', compact('orders'));
     }
 }
