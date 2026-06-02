@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use App\Observers\ImageCompressObserver;
 
@@ -28,11 +29,24 @@ class Product extends Model
             }
         });
 
+        // Bust product caches
+        static::saved(function ($product) {
+            Cache::forget('product.' . $product->slug);
+            Cache::forget('products.featured');
+            Cache::forget('products.business');
+            Cache::forget('products.admin_panel');
+        });
+        static::deleted(function ($product) {
+            Cache::forget('product.' . $product->slug);
+            Cache::forget('products.featured');
+            Cache::forget('products.business');
+            Cache::forget('products.admin_panel');
+        });
+
         // Compress thumbnail after save
         static::created(function ($product) {
             ImageCompressObserver::compress($product->thumbnail, quality: 80, maxWidth: 1200);
         });
-
         static::updated(function ($product) {
             if ($product->isDirty('thumbnail')) {
                 ImageCompressObserver::compress($product->thumbnail, quality: 80, maxWidth: 1200);

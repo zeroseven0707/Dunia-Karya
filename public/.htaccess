@@ -24,3 +24,47 @@
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
 </IfModule>
+
+# ──────────────────────────────────────────────
+# Gzip Compression
+# ──────────────────────────────────────────────
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css
+    AddOutputFilterByType DEFLATE text/javascript application/javascript application/x-javascript
+    AddOutputFilterByType DEFLATE application/json application/xml application/xhtml+xml
+    AddOutputFilterByType DEFLATE image/svg+xml font/ttf font/otf font/woff font/woff2
+</IfModule>
+
+# ──────────────────────────────────────────────
+# Browser Caching — static assets
+# ──────────────────────────────────────────────
+<IfModule mod_expires.c>
+    ExpiresActive On
+
+    # Vite-built assets have hash in filename — cache forever
+    <FilesMatch "\.(js|css)$">
+        ExpiresDefault "access plus 1 year"
+        Header set Cache-Control "public, max-age=31536000, immutable"
+    </FilesMatch>
+
+    # Images
+    <FilesMatch "\.(jpg|jpeg|png|gif|webp|svg|ico)$">
+        ExpiresDefault "access plus 3 months"
+        Header set Cache-Control "public, max-age=7776000"
+    </FilesMatch>
+
+    # Fonts
+    <FilesMatch "\.(woff|woff2|ttf|otf|eot)$">
+        ExpiresDefault "access plus 1 year"
+        Header set Cache-Control "public, max-age=31536000, immutable"
+    </FilesMatch>
+</IfModule>
+
+# ──────────────────────────────────────────────
+# Security headers
+# ──────────────────────────────────────────────
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>

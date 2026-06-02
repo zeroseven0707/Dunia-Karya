@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daftar - Dunia Karya</title>
     <link rel="icon" type="image/png" href="{{ asset('img/favicon.png') }}">
-    <script src="{{ asset('js/tailwind.js') }}"></script>
+    @vite(['resources/css/app.css'])
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
         * { font-family: 'Inter', sans-serif; }

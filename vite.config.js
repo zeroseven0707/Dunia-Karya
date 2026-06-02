@@ -1,6 +1,5 @@
 import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
-import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
     plugins: [
@@ -8,6 +7,18 @@ export default defineConfig({
             input: ['resources/css/app.css', 'resources/js/app.js'],
             refresh: true,
         }),
-        tailwindcss(),
     ],
+    build: {
+        // Minify CSS and JS
+        minify: 'esbuild',
+        cssMinify: true,
+        rollupOptions: {
+            output: {
+                // Cache-busting filenames
+                entryFileNames: 'assets/[name]-[hash].js',
+                chunkFileNames: 'assets/[name]-[hash].js',
+                assetFileNames: 'assets/[name]-[hash].[ext]',
+            },
+        },
+    },
 });

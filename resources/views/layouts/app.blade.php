@@ -37,8 +37,7 @@
     @show
 
     <!-- Tailwind -->
-    <script src="{{ asset('js/tailwind.js') }}"></script>
-    <style src="{{ asset('css/style.css') }}"></style>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link rel="stylesheet" href="{{ asset('css/animations.css') }}">
     <script type="application/ld+json">
         {!! json_encode([

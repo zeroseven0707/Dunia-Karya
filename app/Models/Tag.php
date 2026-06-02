@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 
 class Tag extends Model
@@ -16,12 +17,13 @@ class Tag extends Model
         static::creating(function ($tag) {
             $tag->slug = Str::slug($tag->name);
         });
-
         static::updating(function ($tag) {
             if ($tag->isDirty('name')) {
                 $tag->slug = Str::slug($tag->name);
             }
         });
+        static::saved(function ()  { Cache::forget('tags.all'); });
+        static::deleted(function () { Cache::forget('tags.all'); });
     }
 
     public function products()
