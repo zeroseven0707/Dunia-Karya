@@ -99,7 +99,7 @@
                 snap.pay(data.snap_token, {
                     onSuccess: function(result){
                         console.log('Payment success:', result);
-                        window.location.href = "{{ route('purchases') }}";
+                        window.location.href = "{{ route('payment.success') }}?order_id=" + (result.order_id || '');
                     },
                     onPending: function(result){
                         console.log('Payment pending:', result);

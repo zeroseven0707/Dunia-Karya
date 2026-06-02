@@ -204,6 +204,30 @@ class CheckoutController extends Controller
         }
     }
 
+    public function success(Request $request)
+    {
+        $orderId = $request->query('order_id');
+
+        $order = null;
+        if ($orderId) {
+            $order = Order::where('id', $orderId)
+                ->where('user_id', Auth::id())
+                ->with('items.product')
+                ->first();
+        }
+
+        // If no specific order, get the latest paid order
+        if (!$order) {
+            $order = Order::where('user_id', Auth::id())
+                ->where('status', 'paid')
+                ->with('items.product')
+                ->latest()
+                ->first();
+        }
+
+        return view('payment.success', compact('order'));
+    }
+
     public function purchases()
     {
         $orders = Order::where('user_id', Auth::id())

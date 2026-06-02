@@ -199,7 +199,9 @@
 
                 if (data.snap_token) {
                     snap.pay(data.snap_token, {
-                        onSuccess: function () { window.location.reload(); },
+                        onSuccess: function (result) {
+                            window.location.href = '{{ route('payment.success') }}?order_id=' + (result.order_id || '');
+                        },
                         onPending: function () { window.location.reload(); },
                         onError: function () { alert('Pembayaran gagal. Silakan coba lagi.'); },
                         onClose: function () {}

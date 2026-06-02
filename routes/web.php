@@ -28,6 +28,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/checkout/process', [CheckoutController::class, 'process'])->name('checkout.process');
     Route::post('/checkout/repay/{order}', [CheckoutController::class, 'repay'])->name('checkout.repay');
     Route::get('/my-purchases', [CheckoutController::class, 'purchases'])->name('purchases.index');
+    Route::get('/payment/success', [CheckoutController::class, 'success'])->name('payment.success');
 });
 
 Route::get('/privacy-policy', [HomeController::class, 'privacy'])->name('privacy');
