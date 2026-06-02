@@ -7,7 +7,6 @@ use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Midtrans\Config;
-use Midtrans\Notification;
 
 class MidtransCallbackController extends Controller
 {
@@ -29,23 +28,27 @@ class MidtransCallbackController extends Controller
     public function callback(Request $request)
     {
         try {
-            $notification = new Notification();
+            // Read directly from POST body — avoids unnecessary API call to Midtrans
+            $payload = $request->all();
 
-            $orderId           = $notification->order_id;
-            $transactionStatus = $notification->transaction_status;
-            $fraudStatus       = $notification->fraud_status;
-            $paymentType       = $notification->payment_type;
-            $transactionId     = $notification->transaction_id;
+            $orderId           = $payload['order_id'] ?? null;
+            $transactionStatus = $payload['transaction_status'] ?? null;
+            $fraudStatus       = $payload['fraud_status'] ?? null;
+            $paymentType       = $payload['payment_type'] ?? null;
+            $transactionId     = $payload['transaction_id'] ?? null;
+            $statusCode        = $payload['status_code'] ?? null;
+            $grossAmount       = $payload['gross_amount'] ?? null;
+
+            if (!$orderId || !$transactionStatus) {
+                return response()->json(['message' => 'Invalid payload'], 400);
+            }
 
             // Verify signature key to prevent forged callbacks
-            $signatureKey = hash('sha512',
-                $orderId
-                . $notification->status_code
-                . $notification->gross_amount
-                . config('midtrans.server_key')
+            $expectedSignature = hash('sha512',
+                $orderId . $statusCode . $grossAmount . config('midtrans.server_key')
             );
 
-            if ($signatureKey !== $request->input('signature_key')) {
+            if ($expectedSignature !== ($payload['signature_key'] ?? '')) {
                 Log::warning('Midtrans: invalid signature', ['order_id' => $orderId]);
                 return response()->json(['message' => 'Invalid signature'], 403);
             }
