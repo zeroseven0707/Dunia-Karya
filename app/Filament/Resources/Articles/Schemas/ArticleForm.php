@@ -21,7 +21,11 @@ class ArticleForm
                     ->image()
                     ->disk('public')
                     ->directory('articles/images')
-                    ->preserveFilenames(),
+                    ->preserveFilenames()
+                    ->imageResizeMode('cover')
+                    ->imageResizeTargetWidth('1200')
+                    ->imageResizeTargetHeight('630')
+                    ->imageResizeUpscale(false),
                 Textarea::make('excerpt')
                     ->columnSpanFull(),
                 RichEditor::make('content')

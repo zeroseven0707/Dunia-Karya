@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Str;
+use App\Observers\ImageCompressObserver;
 
 class Product extends Model
 {
@@ -18,13 +19,23 @@ class Product extends Model
             if (!$product->user_id) {
                 $product->user_id = auth()->id();
             }
-
             $product->slug = Str::slug($product->title);
         });
 
         static::updating(function ($product) {
             if ($product->isDirty('title')) {
                 $product->slug = Str::slug($product->title);
+            }
+        });
+
+        // Compress thumbnail after save
+        static::created(function ($product) {
+            ImageCompressObserver::compress($product->thumbnail, quality: 80, maxWidth: 1200);
+        });
+
+        static::updated(function ($product) {
+            if ($product->isDirty('thumbnail')) {
+                ImageCompressObserver::compress($product->thumbnail, quality: 80, maxWidth: 1200);
             }
         });
     }

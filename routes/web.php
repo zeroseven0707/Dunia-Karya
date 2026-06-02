@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\DownloadController;
 use App\Http\Controllers\ProfileController;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
@@ -38,7 +39,7 @@ Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
 
 Route::middleware('auth')->group(function () {
     Route::get('/purchases', [CheckoutController::class, 'purchases'])->name('purchases');
-    Route::get('/download/{file}', [App\Http\Controllers\DownloadController::class, 'download'])->name('download.file');
+    Route::get('/download/{file}', [DownloadController::class, 'download'])->name('download.file');
 
     Route::get('/profile/setting', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

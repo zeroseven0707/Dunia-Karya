@@ -17,6 +17,10 @@ class BannerForm
                 ->directory('banner')
                 ->disk('public')
                 ->preserveFilenames()
+                ->imageResizeMode('cover')
+                ->imageResizeTargetWidth('1920')
+                ->imageResizeTargetHeight('600')
+                ->imageResizeUpscale(false)
                 ->columnSpanFull(),
                 TextInput::make('alt')
                     ->required(),

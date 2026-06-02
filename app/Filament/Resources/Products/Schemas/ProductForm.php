@@ -40,6 +40,10 @@ class ProductForm
                 ->directory('products/thumbnails')
                 ->disk('public')
                 ->preserveFilenames()
+                ->imageResizeMode('cover')
+                ->imageResizeTargetWidth('1200')
+                ->imageResizeTargetHeight('800')
+                ->imageResizeUpscale(false)
                 ->columnSpanFull(),
 
             Select::make('tags')
