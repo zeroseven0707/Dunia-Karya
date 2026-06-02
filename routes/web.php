@@ -59,6 +59,7 @@ Route::get('/auth/google/callback', function () {
             'google_id' => $googleUser->getId(),
             'avatar' => $googleUser->getAvatar(),
             'email_verified_at' => now(),
+            'password' => \Illuminate\Support\Facades\Hash::make(\Illuminate\Support\Str::random(32)),
         ],
     );
 
