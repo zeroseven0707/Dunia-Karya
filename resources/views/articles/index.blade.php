@@ -47,10 +47,14 @@
 
                         <article class="grid grid-cols-1 lg:grid-cols-2 gap-8 bg-white rounded-2xl shadow-xl overflow-hidden hover-lift smooth-transition">
                             <a href="{{ route('articles.show', $headline->slug) }}" class="image-zoom-container h-full">
-                                <img src="{{ asset('storage/' . $headline->image) }}"
-                                     alt="{{ $headline->title }}"
-                                     class="w-full h-full object-cover image-zoom min-h-[300px] lg:min-h-[400px]"
-                                     onerror="this.onerror=null;this.src='https://placehold.co/800x600/0A1E58/FFFFFF?text=Featured+Article';" />
+                                <img
+                                    src="https://placehold.co/800x600/e5e7eb/9ca3af?text=..."
+                                    data-src="{{ $headline->image ? asset('storage/' . $headline->image) : 'https://placehold.co/800x600/0A1E58/FFFFFF?text=Featured+Article' }}"
+                                    alt="{{ $headline->title }}"
+                                    class="lazy w-full h-full object-cover image-zoom min-h-[300px] lg:min-h-[400px]"
+                                    loading="lazy"
+                                    onerror="this.onerror=null;this.src='https://placehold.co/800x600/0A1E58/FFFFFF?text=Featured+Article';"
+                                />
                             </a>
                             <div class="p-8 flex flex-col justify-center">
                                 <div class="flex items-center gap-3 mb-4">
@@ -85,49 +89,20 @@
                             Artikel Terbaru
                         </h2>
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            @foreach ($others as $index => $article)
-                                <article class="bg-white rounded-xl shadow-lg overflow-hidden hover-lift smooth-transition scroll-reveal delay-{{ min($index * 100, 500) }}">
-                                    <a href="{{ route('articles.show', $article->slug) }}" class="image-zoom-container block h-56">
-                                        <img src="{{ asset('storage/' . $article->image) }}"
-                                             alt="{{ $article->title }}"
-                                             class="w-full h-full object-cover image-zoom"
-                                             onerror="this.onerror=null;this.src='https://placehold.co/600x400/0A1E58/FFFFFF?text=Article';" />
-                                    </a>
-                                    <div class="p-6">
-                                        <div class="flex items-center gap-2 mb-3">
-                                            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                            </svg>
-                                            <span class="text-sm text-gray-500">
-                                                {{ \Carbon\Carbon::parse($article->date)->translatedFormat('d M Y') }}
-                                            </span>
-                                        </div>
-                                        <a href="{{ route('articles.show', $article->slug) }}"
-                                           class="text-xl font-bold text-gray-900 hover:text-blue-600 transition-colors line-clamp-2 mb-3 block">
-                                            {{ $article->title }}
-                                        </a>
-                                        <p class="text-gray-600 text-sm line-clamp-3 mb-4">
-                                            {{ strip_tags(Str::limit($article->excerpt ?? $article->content, 120)) }}
-                                        </p>
-                                        <div class="flex items-center justify-between pt-4 border-t border-gray-100">
-                                            <span class="text-sm text-gray-500">{{ $article->author ?? 'Redaksi' }}</span>
-                                            <a href="{{ route('articles.show', $article->slug) }}"
-                                               class="text-blue-600 hover:text-blue-700 font-semibold text-sm flex items-center group">
-                                                Baca
-                                                <svg class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                                                </svg>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </article>
-                            @endforeach
+                        <div id="articles-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            @include('articles._card_list', ['articles' => $others, 'skip_first' => false])
                         </div>
 
-                        <!-- Pagination -->
-                        <div class="mt-12 flex justify-center">
-                            {{ $articles->links('vendor.pagination.tailwind') }}
+                        {{-- Infinite scroll sentinel --}}
+                        <div id="article-sentinel" class="flex justify-center py-10" data-next-page="{{ $articles->nextPageUrl() }}">
+                            <div id="article-loader" class="hidden flex items-center gap-3 text-gray-500 text-sm">
+                                <svg class="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+                                </svg>
+                                Memuat artikel...
+                            </div>
+                            <p id="article-end" class="hidden text-gray-400 text-sm">Semua artikel telah ditampilkan</p>
                         </div>
                     </section>
                     @endif
@@ -290,27 +265,74 @@
 </div>
 @endsection
 @push('scripts')
-    <script>
-(function() {
-    const reveals = document.querySelectorAll('.scroll-reveal');
+<script>
+(function () {
+    // ── Infinite Scroll ──────────────────────────────────────────
+    const grid     = document.getElementById('articles-grid');
+    const sentinel = document.getElementById('article-sentinel');
+    const loader   = document.getElementById('article-loader');
+    const endMsg   = document.getElementById('article-end');
+    let nextUrl    = sentinel ? sentinel.dataset.nextPage : null;
+    let loading    = false;
+    let page       = 2; // page 1 already loaded
 
-    const revealOnScroll = () => {
-        reveals.forEach(element => {
-            const elementTop = element.getBoundingClientRect().top;
-            const elementVisible = 150;
+    function loadMore() {
+        if (!nextUrl || loading) return;
+        loading = true;
+        loader.classList.remove('hidden');
 
-            if (elementTop < window.innerHeight - elementVisible) {
-                element.classList.add('revealed');
+        fetch(nextUrl + '&skip_first=0', {
+            headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(r => r.json())
+        .then(data => {
+            grid.insertAdjacentHTML('beforeend', data.html);
+            initLazyImages();
+            nextUrl = data.nextPage;
+            page++;
+            loading = false;
+            loader.classList.add('hidden');
+            if (!nextUrl) {
+                endMsg.classList.remove('hidden');
+                observer.disconnect();
             }
-        });
-    };
+        })
+        .catch(() => { loading = false; loader.classList.add('hidden'); });
+    }
 
-    window.addEventListener('scroll', revealOnScroll);
-    revealOnScroll(); // Initial check
+    const observer = new IntersectionObserver(entries => {
+        if (entries[0].isIntersecting) loadMore();
+    }, { rootMargin: '200px' });
 
-    document.addEventListener('turbo:before-cache', function() {
-        window.removeEventListener('scroll', revealOnScroll);
-    }, { once: true });
+    if (sentinel && nextUrl) {
+        observer.observe(sentinel);
+    } else if (sentinel) {
+        endMsg.classList.remove('hidden');
+    }
+
+    // ── Lazy Image Loading ────────────────────────────────────────
+    function initLazyImages() {
+        const lazyImgs = document.querySelectorAll('img.lazy[data-src]');
+        if ('IntersectionObserver' in window) {
+            const imgObserver = new IntersectionObserver((entries, obs) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        img.src = img.dataset.src;
+                        img.classList.remove('lazy');
+                        obs.unobserve(img);
+                    }
+                });
+            }, { rootMargin: '100px' });
+            lazyImgs.forEach(img => imgObserver.observe(img));
+        } else {
+            lazyImgs.forEach(img => { img.src = img.dataset.src; });
+        }
+    }
+
+    initLazyImages();
+
+    document.addEventListener('turbo:before-cache', () => observer.disconnect(), { once: true });
 })();
 </script>
 @endpush

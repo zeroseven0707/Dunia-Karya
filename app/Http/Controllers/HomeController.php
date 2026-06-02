@@ -32,10 +32,18 @@ class HomeController extends Controller
         return view('index', $data);
     }
 
-    public function product()
+    public function product(Request $request)
     {
         $data['categories'] = Cache::remember('categories.all', 3600, fn() => Category::all());
         $data['products']   = Product::paginate(16);
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'html'     => view('products._card_list', ['products' => $data['products']])->render(),
+                'nextPage' => $data['products']->nextPageUrl(),
+            ]);
+        }
+
         return view('products.index', $data);
     }
 
@@ -60,6 +68,14 @@ class HomeController extends Controller
         } else {
             $articles = Article::latest()->paginate(10);
         }
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'html'     => view('articles._card_list', ['articles' => $articles, 'skip_first' => $request->input('page', 1) == 1])->render(),
+                'nextPage' => $articles->nextPageUrl(),
+            ]);
+        }
+
         return view('articles.index', compact('articles'));
     }
 
@@ -100,8 +116,40 @@ class HomeController extends Controller
         return view('products.index', $data);
     }
 
-    public function privacy() { return view('pages.privacy'); }
-    public function terms()   { return view('pages.terms'); }
-    public function faq()     { return view('pages.faq'); }
-    public function contact() { return view('pages.contact'); }
+    public function privacy()
+    {
+        return $this->staticPage('pages.privacy');
+    }
+
+    public function terms()
+    {
+        return $this->staticPage('pages.terms');
+    }
+
+    public function faq()
+    {
+        return $this->staticPage('pages.faq');
+    }
+
+    public function contact()
+    {
+        // Contact page still renders fresh (may have dynamic elements like maps)
+        return view('pages.contact');
+    }
+
+    /**
+     * Return a static page with aggressive HTTP caching headers.
+     * Content is cached for 7 days in browser, 30 days on CDN/proxy.
+     */
+    private function staticPage(string $view): \Illuminate\Http\Response
+    {
+        $html = Cache::remember('static_page.' . $view, now()->addDays(30), fn() =>
+            view($view)->render()
+        );
+
+        return response($html)
+            ->header('Content-Type', 'text/html; charset=UTF-8')
+            ->header('Cache-Control', 'public, max-age=604800, s-maxage=2592000, stale-while-revalidate=86400')
+            ->header('Vary', 'Accept-Encoding');
+    }
 }

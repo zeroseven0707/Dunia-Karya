@@ -127,8 +127,13 @@
                 <!-- Grid item: col-start-1 row-start-1 to stack them -->
                 <div class="carousel-slide col-start-1 row-start-1 transition-opacity duration-700 ease-in-out {{ $index === 0 ? 'opacity-100 z-10' : 'opacity-0 z-0' }}">
                     <a href="{{ $banner->url }}" class="block w-full">
-                        <img src="{{ asset('storage/' . $banner->path) }}" alt="{{ $banner->alt }}"
-                            class="w-full h-auto object-contain rounded-lg shadow-md" />
+                        <img
+                            src="{{ $index === 0 ? asset('storage/' . $banner->path) : 'https://placehold.co/1200x400/e5e7eb/9ca3af?text=...' }}"
+                            data-src="{{ asset('storage/' . $banner->path) }}"
+                            alt="{{ $banner->alt }}"
+                            class="{{ $index !== 0 ? 'lazy' : '' }} w-full h-auto object-contain rounded-lg shadow-md"
+                            loading="{{ $index === 0 ? 'eager' : 'lazy' }}"
+                        />
                     </a>
                 </div>
             @endforeach
@@ -153,9 +158,14 @@
             <a href="{{ route('product.show', $product->slug) }}"
                 class="product-card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer stagger-item">
                 <div class="overflow-hidden">
-                    <img src="{{ $product->thumbnail ? asset('storage/' . $product->thumbnail) : 'https://placehold.co/400x225?text=No+Image' }}"
-                        alt="{{ $product->title }}" class="rounded-t-lg object-cover w-full h-36 sm:h-44"
-                        onerror="this.onerror=null;this.src='https://placehold.co/400x225?text=No+Image';" />
+                    <img
+                        src="https://placehold.co/400x225/e5e7eb/9ca3af?text=..."
+                        data-src="{{ $product->thumbnail ? asset('storage/' . $product->thumbnail) : 'https://placehold.co/400x225?text=No+Image' }}"
+                        alt="{{ $product->title }}"
+                        class="lazy rounded-t-lg object-cover w-full h-36 sm:h-44"
+                        loading="lazy"
+                        onerror="this.onerror=null;this.src='https://placehold.co/400x225?text=No+Image';"
+                    />
                 </div>
                 <div class="p-4">
                     <h3 class="text-gray-900 text-sm font-semibold leading-snug truncate" title="{{ $product->title }}">
@@ -271,9 +281,14 @@
         @foreach ($productForBussines as $productForBussineses)
             <a href="{{ route('product.show', $productForBussineses->slug) }}" class="product-card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer">
                 <div class="overflow-hidden">
-                    <img src="{{ $productForBussineses->thumbnail ? asset('storage/' . $productForBussineses->thumbnail) : 'https://placehold.co/400x225?text=No+Image' }}"
-                        alt="{{ $productForBussineses->title }}" class="rounded-t-lg object-cover w-full h-36 sm:h-44"
-                        onerror="this.onerror=null;this.src='https://placehold.co/400x225?text=No+Image';" />
+                    <img
+                        src="https://placehold.co/400x225/e5e7eb/9ca3af?text=..."
+                        data-src="{{ $productForBussineses->thumbnail ? asset('storage/' . $productForBussineses->thumbnail) : 'https://placehold.co/400x225?text=No+Image' }}"
+                        alt="{{ $productForBussineses->title }}"
+                        class="lazy rounded-t-lg object-cover w-full h-36 sm:h-44"
+                        loading="lazy"
+                        onerror="this.onerror=null;this.src='https://placehold.co/400x225?text=No+Image';"
+                    />
                 </div>
                 <div class="p-4">
                     <h3 class="text-gray-900 text-sm font-semibold leading-snug truncate" title="{{ $productForBussineses->title }}">
@@ -329,9 +344,14 @@
         @foreach ($adminPanel as $adminPanels)
             <a href="{{ route('product.show', $adminPanels->slug) }}" class="product-card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer">
                 <div class="overflow-hidden">
-                    <img src="{{ $adminPanels->thumbnail ? asset('storage/' . $adminPanels->thumbnail) : 'https://placehold.co/400x225?text=No+Image' }}"
-                        alt="{{ $adminPanels->title }}" class="rounded-t-lg object-cover w-full h-36 sm:h-44"
-                        onerror="this.onerror=null;this.src='https://placehold.co/400x225?text=No+Image';" />
+                    <img
+                        src="https://placehold.co/400x225/e5e7eb/9ca3af?text=..."
+                        data-src="{{ $adminPanels->thumbnail ? asset('storage/' . $adminPanels->thumbnail) : 'https://placehold.co/400x225?text=No+Image' }}"
+                        alt="{{ $adminPanels->title }}"
+                        class="lazy rounded-t-lg object-cover w-full h-36 sm:h-44"
+                        loading="lazy"
+                        onerror="this.onerror=null;this.src='https://placehold.co/400x225?text=No+Image';"
+                    />
                 </div>
                 <div class="p-4">
                     <h3 class="text-gray-900 text-sm font-semibold leading-snug truncate" title="{{ $adminPanels->title }}">
@@ -384,6 +404,24 @@
 
     const elements = document.querySelectorAll('.animate-on-scroll');
     elements.forEach(el => observer.observe(el));
+
+    // ── Lazy Image Loading ────────────────────────────────────────
+    const lazyImgs = document.querySelectorAll('img.lazy[data-src]');
+    if ('IntersectionObserver' in window) {
+        const imgObserver = new IntersectionObserver((entries, obs) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    img.src = img.dataset.src;
+                    img.classList.remove('lazy');
+                    obs.unobserve(img);
+                }
+            });
+        }, { rootMargin: '100px' });
+        lazyImgs.forEach(img => imgObserver.observe(img));
+    } else {
+        lazyImgs.forEach(img => { img.src = img.dataset.src; });
+    }
 
     // Cleanup on cache
     document.addEventListener('turbo:before-cache', () => {

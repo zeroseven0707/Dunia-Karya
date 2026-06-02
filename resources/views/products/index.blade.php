@@ -297,89 +297,88 @@
         <div class="h-1 w-24 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full"></div>
     </div>
 
-    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        @foreach ($products as $product)
-            <a href="{{ url("product/{$product->slug}") }}"
-                class="product-card stagger-item bg-white rounded-2xl shadow-md hover:shadow-2xl overflow-hidden">
+    <div id="products-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        @include('products._card_list', ['products' => $products])
+    </div>
 
-                {{-- Thumbnail --}}
-                <div class="relative overflow-hidden h-36 sm:h-44">
-                    @if ($product->discount_price && $product->discount_price < $product->price)
-                        <div class="absolute top-3 right-3 z-10">
-                            <span class="discount-badge bg-gradient-to-r from-red-500 to-pink-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
-                                -{{ round((($product->price - $product->discount_price) / $product->price) * 100) }}%
-                            </span>
-                        </div>
-                    @endif
-                    <img src="{{ $product->thumbnail ? asset('storage/' . $product->thumbnail) : 'https://placehold.co/400x225?text=No+Image' }}"
-                        alt="{{ $product->title }}" class="w-full h-full object-cover"
-                        loading="lazy"
-                        onerror="this.onerror=null;this.src='https://placehold.co/400x225?text=No+Image';" />
-                </div>
-
-                <div class="p-4">
-                    {{-- Title --}}
-                    <h3 class="text-gray-900 text-sm font-bold leading-snug line-clamp-2 min-h-[2.5rem] mb-2"
-                        title="{{ $product->title }}">
-                        {{ $product->title }}
-                    </h3>
-
-                    {{-- Price --}}
-                    @if ($product->discount_price && $product->discount_price < $product->price)
-                        <div class="flex items-baseline gap-2">
-                            <p class="price-badge text-lg font-extrabold">
-                                Rp{{ number_format($product->discount_price, 0, ',', '.') }}
-                            </p>
-                            <span class="text-gray-400 line-through text-xs">
-                                Rp{{ number_format($product->price, 0, ',', '.') }}
-                            </span>
-                        </div>
-                    @else
-                        <p class="price-badge text-lg font-extrabold">
-                            Rp{{ number_format($product->price, 0, ',', '.') }}
-                        </p>
-                    @endif
-
-                    {{-- Category --}}
-                    <div class="mt-3 pt-3 border-t border-gray-100 flex items-center gap-2">
-                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
-                        </svg>
-                        <span class="text-xs text-gray-600 font-medium">{{ $product->category->name ?? 'Uncategorized' }}</span>
-                    </div>
-                </div>
-            </a>
-        @endforeach
+    {{-- Infinite scroll sentinel --}}
+    <div id="scroll-sentinel" class="flex justify-center py-10" data-next-page="{{ $products->nextPageUrl() }}">
+        <div id="scroll-loader" class="hidden flex items-center gap-3 text-gray-500 text-sm">
+            <svg class="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+            </svg>
+            Memuat produk...
+        </div>
+        <p id="scroll-end" class="hidden text-gray-400 text-sm">Semua produk telah ditampilkan</p>
     </div>
 </section>
 @endsection
 @push('scripts')
 <script>
-// Smooth scroll reveal on load
-document.addEventListener('turbo:load', function() {
-    // Add intersection observer for scroll animations
-    const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-    };
+(function () {
+    // ── Infinite Scroll ──────────────────────────────────────────
+    const grid      = document.getElementById('products-grid');
+    const sentinel  = document.getElementById('scroll-sentinel');
+    const loader    = document.getElementById('scroll-loader');
+    const endMsg    = document.getElementById('scroll-end');
+    let nextUrl     = sentinel ? sentinel.dataset.nextPage : null;
+    let loading     = false;
 
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.style.opacity = '1';
-                entry.target.style.transform = 'translateY(0)';
-            }
-        });
-    }, observerOptions);
+    function loadMore() {
+        if (!nextUrl || loading) return;
+        loading = true;
+        loader.classList.remove('hidden');
 
-    // Observe all product cards
-    document.querySelectorAll('.product-card').forEach(el => {
-        observer.observe(el);
-    });
+        fetch(nextUrl, { headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' } })
+            .then(r => r.json())
+            .then(data => {
+                grid.insertAdjacentHTML('beforeend', data.html);
+                initLazyImages();       // lazy-load new images
+                nextUrl = data.nextPage;
+                loading = false;
+                loader.classList.add('hidden');
+                if (!nextUrl) {
+                    endMsg.classList.remove('hidden');
+                    observer.disconnect();
+                }
+            })
+            .catch(() => { loading = false; loader.classList.add('hidden'); });
+    }
 
-    document.addEventListener('turbo:before-cache', () => {
-        observer.disconnect();
-    }, { once: true });
-});
+    const observer = new IntersectionObserver(entries => {
+        if (entries[0].isIntersecting) loadMore();
+    }, { rootMargin: '200px' });
+
+    if (sentinel && nextUrl) {
+        observer.observe(sentinel);
+    } else if (sentinel) {
+        endMsg.classList.remove('hidden');
+    }
+
+    // ── Lazy Image Loading ────────────────────────────────────────
+    function initLazyImages() {
+        const lazyImgs = document.querySelectorAll('img.lazy[data-src]');
+        if ('IntersectionObserver' in window) {
+            const imgObserver = new IntersectionObserver((entries, obs) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        img.src = img.dataset.src;
+                        img.classList.remove('lazy');
+                        obs.unobserve(img);
+                    }
+                });
+            }, { rootMargin: '100px' });
+            lazyImgs.forEach(img => imgObserver.observe(img));
+        } else {
+            lazyImgs.forEach(img => { img.src = img.dataset.src; });
+        }
+    }
+
+    initLazyImages();
+
+    document.addEventListener('turbo:before-cache', () => observer.disconnect(), { once: true });
+})();
 </script>
 @endpush
