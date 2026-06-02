@@ -131,10 +131,7 @@ class CheckoutController extends Controller
             ]
         ];
 
-        // Only set notification URL if in production or if APP_URL is set
-        if (config('app.url') && config('app.url') !== 'http://localhost') {
-            Config::$overrideNotifUrl = config('app.url') . '/api/midtrans/callback';
-        }
+        Config::$overrideNotifUrl = url('/api/midtrans/callback');
 
         try {
             $snapToken = Snap::getSnapToken($params);
@@ -156,8 +153,7 @@ class CheckoutController extends Controller
         }
     }
 
-    public function repay(Request $request, $orderId)
-    {
+    public function repay(Request $request, $orderId)    {
         $order = Order::where('id', $orderId)
             ->where('user_id', Auth::id())
             ->where('status', 'pending')
@@ -188,9 +184,7 @@ class CheckoutController extends Controller
             ],
         ];
 
-        if (config('app.url') && config('app.url') !== 'http://localhost') {
-            Config::$overrideNotifUrl = config('app.url') . '/api/midtrans/callback';
-        }
+        Config::$overrideNotifUrl = url('/api/midtrans/callback');
 
         try {
             $snapToken = Snap::getSnapToken($params);

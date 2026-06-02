@@ -17,7 +17,6 @@ Route::get('/tag/{slug}', [HomeController::class, 'tag'])->name('tag.show');
 
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
-use App\Http\Controllers\PaymentCallbackController;
 
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
 Route::post('/cart/add/{productId}', [CartController::class, 'addToCart'])->name('cart.add');
@@ -30,8 +29,6 @@ Route::middleware('auth')->group(function () {
     Route::post('/checkout/repay/{order}', [CheckoutController::class, 'repay'])->name('checkout.repay');
     Route::get('/my-purchases', [CheckoutController::class, 'purchases'])->name('purchases.index');
 });
-
-Route::post('/payment/notification', [PaymentCallbackController::class, 'handle'])->name('payment.notification');
 
 Route::get('/privacy-policy', [HomeController::class, 'privacy'])->name('privacy');
 Route::get('/terms-and-conditions', [HomeController::class, 'terms'])->name('terms');
